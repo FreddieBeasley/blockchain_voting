@@ -1,23 +1,10 @@
 #imports
+import helper_functions
 import json
 import rsa
 from hashlib import sha256
 from time import time
 from collections import deque
-
-class Voter:
-     def __init__(self, voter_id):
-          self.__voter_id = voter_id
-          self.__public_key, self.__private_key = rsa.newkeys(512)
-
-     def sign_vote(self, vote):
-          vote.sign(self.__private_key)
-
-
-     def get_public_key(self):
-          return self.__public_key
-
-
 
 class Vote:
      def __init__(self, voter_public_key):
@@ -26,8 +13,10 @@ class Vote:
           self.__signature = None
 
      #getters
-     def get_voter(self):
+     def get_voter_public_key(self):
           return self.__voter
+     def get_voter(self):
+          return self.__voter.save_pkcs1().decode("utf-8")
      
      def get_signature(self):
           return self.__signature
@@ -53,17 +42,17 @@ class Vote:
      
 
      def sign(self, private_key):
-          data = f"{self.get_voter().save_pkcs1().decode("utf-8")}{self.get_vote()}"
+          data = f"{self.get_voter()}{self.get_vote()}"
           self.__signature = rsa.sign(data.encode("utf-8"), private_key, "SHA-256")
 
      def validate_vote(self):
           # Checking for signature
           if not self.__signature:
-               print(f"{self.__voter} | {self.__vote}: Missing Signature")
+               print(f"{self.get_voter()} | {self.__vote}: Missing Signature")
                return False
           
           # Verifying signature
-          data = f"{self.__voter.save_pkcs1().decode()}{self.__vote}"
+          data = f"{self.get_voter()}{self.__vote}"
 
           try:
                rsa.verify(data.encode(), self.__signature, self.__voter)
@@ -75,21 +64,20 @@ class Vote:
 
      def serialise(self):
           return {
-               "voter": self.__voter.save_pkcs1().decode("utf-8"),
-               "vote": str(self.__vote),
+               "voter": self.get_voter(),
+               "vote": str(self.get_vote()),
                "signature": self.__signature.hex() if self.__signature is not None else None
           }
      
 class Block:
-     def __init__(self, votes:list, previous_hash="0000"):
+     def __init__(self, votes:list, difficulty, previous_hash="0000", vote_count=None):
 
           #Vote Tracking
-          self.__miner = {}
-          self.__vote_count = {}
           self.__votes = votes
+          self.__vote_count = vote_count if vote_count is not None else {1:0, 2:0, 3:0, 4:0, 5:0}
 
           #Hashing & Validation
-          self.__difficulty = 2
+          self.__difficulty = difficulty
           self.__timestamp = time()
           self.__nonce = 0
           self.__previous_hash = previous_hash
@@ -97,6 +85,12 @@ class Block:
 
 
      # Getter methods
+     def get_votes(self):
+          return self.__votes
+     
+     def get_vote_count(self):
+          return self.__vote_count
+     
      def get_timestamp(self):
           return self.__timestamp
      
@@ -110,7 +104,6 @@ class Block:
      def set_miner(self, miner_id:str):
           self.__miner = miner_id
 
-     # Special methods
      def __proof_of_work(self):
           hash = self.__calculate_hash()
 
@@ -148,6 +141,7 @@ class Block:
      def serialise(self):
           return {
                "votes": [vote.serialise() for vote in self.__votes],
+               "all_votes": self.get_vote_count(), #my want to remove
                "timestamp": self.__timestamp,
                "nonce" : self.__nonce,
                "previous_hash": self.__previous_hash,
@@ -156,26 +150,32 @@ class Block:
 
 class Blockchain:
      def __init__(self):
-          self.__chain = [Block(votes=[])] #of Blocks
+          self.__difficulty = 4
+          self.__chain = [Block(votes=[],difficulty=self.__difficulty)] #of Blocks
           self.__pending_votes = deque()
-          self.__voted_voters = set()
+          self.__voters = set() #set of public keys
+
+     # Temporary Methods
+     def get_voters(self):
+          return self.__voters
+     
+     def add_voters(self, voter):
+          self.__voters.add(voter)
      
      # Getter methods
      def get_chain(self):
           return self.__chain
      
+     def get_difficulty(self):
+          return self.__difficulty
+     
      # Special Methods
      def add_vote(self, vote:Vote):
-          if vote.get_voter() in self.__voted_voters:
-               print("Voter has already voted")
-               return False
 
           if not vote.validate_vote():
                return False
 
-          #fix to remove not add voters
           self.__pending_votes.append(vote)
-          self.__voted_voters.add(vote.get_voter())
 
           return True
      
@@ -184,14 +184,33 @@ class Blockchain:
                print("No pending votes")
                return False
 
-          votes_to_add = list(self.__pending_votes)
+          votes_to_add = set()
+          votes_to_ignore = set()
+          votes_tracking = {1:0, 2:0, 3:0, 4:0, 5:0}
+
+          for vote in self.__pending_votes:
+               if vote.get_voter() not in self.__voters:
+                    print(f"{vote.get_voter()}: Voter has already voted or has not registered to vote")
+                    votes_to_ignore.add(vote)
+               
+               else:
+                    votes_to_add.add(vote)
+                    self.__voters.remove(vote.get_voter())
+                    votes_tracking[vote.get_vote()] += 1
+
           self.__pending_votes.clear()
+
+          if len(votes_to_add) == 0:
+               print('No acceptable votes to add')
+               return False
           
-          new_block = Block(votes=votes_to_add, previous_hash=self.__chain[-1].get_hash())
+          #issue
+          vote_count = helper_functions.dictionary_addition(self.get_chain()[-1].get_vote_count(), votes_tracking)
+
+          new_block = Block(votes=list(votes_to_add), difficulty=self.get_difficulty(), previous_hash=self.__chain[-1].get_hash(), vote_count=vote_count)
+          
           self.__chain.append(new_block)
-
-          print("Block successfully mined")
-
+          print(f"Block successfully mined - Excluded: {[vote.get_voter() for vote in votes_to_ignore]}")
           return True
 
      def validate_blockchain(self):
@@ -200,8 +219,17 @@ class Blockchain:
                     previous_block = self.__chain[i - 1]
                     current_block = self.__chain[i]
                     
+                    # Validating Hash
                     if previous_block.get_hash() != current_block.get_previous_hash():
                          print(f"Invalid blockchain: chain is broken between block {i-1} and {i}")
+                         return False
+                    
+                    # Validating Count
+                    votes_from_block = {1:0, 2:0, 3:0, 4:0, 5:0}
+                    for vote in current_block.get_votes():
+                         votes_from_block[vote.get_vote()] += 1
+                    if helper_functions.dictionary_addition(previous_block.get_vote_count(), votes_from_block) != current_block.get_vote_count():
+                         print(f"Invalid blockchain: votes are not integral between block {i-1} and {i}")
                          return False
                     
                if not current_block.validate_block():
@@ -214,14 +242,17 @@ class Blockchain:
                print(block.serialise())
 
 
-import random
 
-def simulate_election():
+def simulate_election():   
+    print("\n⛓️ Initializing blockchain...")
+    blockchain = Blockchain()
+
     print("\n🔐 Generating voter keys...")
     voters = []
     for i in range(5):  # Simulate 5 voters
         pub, priv = rsa.newkeys(512)
         voters.append((pub, priv))
+        blockchain.add_voters(pub.save_pkcs1().decode('utf-8'))
 
     print("\n🗳️ Casting votes...")
     votes = []
@@ -231,8 +262,7 @@ def simulate_election():
         votes.append(vote)
         print(f"Voter {i+1} voted for party {vote.get_vote()}")
 
-    print("\n⛓️ Initializing blockchain...")
-    blockchain = Blockchain()
+ 
 
     for vote in votes:
         if blockchain.add_vote(vote):
@@ -251,5 +281,7 @@ def simulate_election():
 
     print("\n📦 Final Blockchain State:")
     blockchain.serialise()
+
+    print(blockchain.get_chain()[-1].get_vote_count())
 
 simulate_election()
