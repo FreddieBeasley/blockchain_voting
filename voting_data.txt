@@ -1,0 +1,9 @@
+format:
+voter;voted
+voter;voted
+
+e.g.
+012348329;reform
+838394939;labour
+230943023;labour
+388963345;conservatives
