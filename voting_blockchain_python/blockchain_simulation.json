@@ -1,0 +1,60 @@
+{
+     "chain": [
+          {
+               "votes": [],
+               "vote_count": {
+                    "1": 0,
+                    "2": 0,
+                    "3": 0,
+                    "4": 0,
+                    "5": 0
+               },
+               "timestamp": 1751891839.7754261,
+               "nonce": 21323,
+               "previous_hash": "0000",
+               "hash": "0000ebbc62070073bb3343806216120c777af604728077edcc932e8df8b19c97"
+          },
+          {
+               "votes": [
+                    {
+                         "voter": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQC+cSi7FwSDdmEDMxomE/KP+icwabTCMV7SVewFcNaIL8ryNAF8mTaqtAlB\ng3wADZin4LteY/KI/8hG29H2796JAgMBAAE=\n-----END RSA PUBLIC KEY-----\n",
+                         "vote": "1",
+                         "signature": "2878b8111939af16574932a4491b0f2005555eacf38789e0f8d2a5019752f47605d5926553a21e7f8e9852ad5a7cf94abc172d3228fae5aaaac0599c1d43debf"
+                    },
+                    {
+                         "voter": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQDoCDTIa3AAWMNzVbdCE/PqNK4Wze/l8vIeq1LZmRY2/Zq8pFY5P7/vdaGO\nLxvy5WdvCMpXYgj3dL4VkHVoXvxXAgMBAAE=\n-----END RSA PUBLIC KEY-----\n",
+                         "vote": "2",
+                         "signature": "dc33e9ae8393639a37e538042b2cc12b952a537fe116f1bb66d6ba998370d600254da6c45f133f1dab87f41377eacbb490346403e88e50d057ef8925f59aa480"
+                    },
+                    {
+                         "voter": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQC9qjISJZmGsedxTzYGbZLEvidtK92F50aonna+8SkfSUkVKyBUcsXhN2KC\nM1ib76F4TE86eO/LCwfvw4BlwYgtAgMBAAE=\n-----END RSA PUBLIC KEY-----\n",
+                         "vote": "2",
+                         "signature": "7a3018bcb5395567a727d77b58929f48b64c600059a848f8d2734423a1b882f24588b67652851cbed424bfbf00b357fa86ab5132a9085880b3cc30db680132db"
+                    },
+                    {
+                         "voter": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQCAQEX0TC4y8xGlWn4pied8mDwB64mcLRijhSBDVSwccLOsDTVm7zcvs2Hk\nWnfJXueRChqopIv/VjF4jUWFiHSPAgMBAAE=\n-----END RSA PUBLIC KEY-----\n",
+                         "vote": "2",
+                         "signature": "649ba71c78ef0b0c0917a5251cb48a1bb9da86a8a50d44f4e23449d863b2e935abc2d036a6dc42345682c601d2220aa67fee88f619456b1e33e9d0a1f488d8ed"
+                    },
+                    {
+                         "voter": "-----BEGIN RSA PUBLIC KEY-----\nMEgCQQDpCCgdaUh+HLlk35xgtLbTPkNC+YKdRZuRx9NH1EDuGZZjDIzsaCMPYqoC\nvh2u11DZEqjdLY21TAEBoGXGuUYXAgMBAAE=\n-----END RSA PUBLIC KEY-----\n",
+                         "vote": "3",
+                         "signature": "2ad299399f2131dc4780d1bd8fbf8b0ebdcff0d943ae676f7cdf323bf2b63bb01f8b5fe3d24f372b9caa82a2956e241ffb0f6b59da684a818a733453c2edef58"
+                    }
+               ],
+               "vote_count": {
+                    "1": 1,
+                    "2": 3,
+                    "3": 1,
+                    "4": 0,
+                    "5": 0
+               },
+               "timestamp": 1751891850.811132,
+               "nonce": 9022,
+               "previous_hash": "0000ebbc62070073bb3343806216120c777af604728077edcc932e8df8b19c97",
+               "hash": "00004415ef9a53d0e66b17d43c79af8a01c9fa684deaa677fe4116e0088b1f1e"
+          }
+     ],
+     "voters": [],
+     "pending_votes": []
+}
