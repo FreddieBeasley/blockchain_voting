@@ -3,7 +3,7 @@ package blockchain;
 import java.util.List;
 import java.util.ArrayList;
 import java.security.MessageDigest;
-import org.json.JSONObject;
+import java.util.Base64;
 
 public class Block {
 
@@ -15,16 +15,16 @@ public class Block {
     private int nonce;
 
     // Initialisation ( for creating  a vote)
-    public Block (String previousHash, List<Votes> votes){
+    public Block (String previousHash, List<Vote> votes){
         this.votes = votes;
         this.previousHash = previousHash;
-        this.hash = calculateHash();
+        this.hash = computeHash();
         this.timestamp = System.currentTimeMillis();
         this.nonce = 0;
     }
 
     // Initialisation ( for constructing a shared vote send throw the network )
-    public Block(String previousHash, List<Votes> votes, String hash, long timestamp, int nonce) {
+    public Block(String previousHash, List<Vote> votes, String hash, long timestamp, int nonce) {
         this.votes = votes;
         this.previousHash = previousHash;
         this.hash = hash;
@@ -41,7 +41,7 @@ public class Block {
         return previousHash;
     }
 
-    public list<Vote> getVotes(){
+    public List<Vote> getVotes(){
         return votes;
     }
 
@@ -64,7 +64,7 @@ public class Block {
             md.update(data.getBytes()); // Passes byte array to the messge digest object
             byte[] digest = md.digest(); // Generates message digest as byte array
 
-            return Base64.getEncoder().encodeToString(digest)
+            return Base64.getEncoder().encodeToString(digest);
 
         } catch (Exception e) {
             System.err.println("Error computing hash: " + e.getMessage());
@@ -85,29 +85,29 @@ public class Block {
             nonce++;
         }
 
-        System.out.println("Block successfully mined.")
+        System.out.println("Block successfully mined.");
     }
 
     public boolean isValid(int difficulty) {
         try{
             // Verify block hash
-            string computedHash = computeHash()
+            String computedHash = computeHash();
             if (!computedHash.equals(hash)){
-                System.out.println("Block verification failed: Invalid block hash")
+                System.out.println("Block verification failed: Invalid block hash");
                 return false;
             }
 
             // Verify proof of work
             String prefix = "0".repeat(difficulty);
             if (!hash.startsWith(prefix)) {
-                System.out.println("Block verification failed: No proof of work")
+                System.out.println("Block verification failed: No proof of work");
                 return false;
             }
 
             // Verify block votes
             for (Vote vote: votes){
                 if (!vote.isValid()) {
-                    System.out.println("Block verification failed: Invalid vote")
+                    System.out.println("Block verification failed: Invalid vote");
                     return false;
                 }
             }
@@ -119,27 +119,4 @@ public class Block {
             return false;
         }
     }
-
-    public JSONObject jsonify(){
-        JSONObject jsonObject = new JSONObject();
-
-        jsonObject.put("hash", hash);
-        jsonObject.put("previousHash", previousHash);
-        jsonObject.put("timestamp", timestamp);
-        jsonObject.put("nonce", nonce);
-
-        JSONArray voteArray = new JSONArray();
-        for (Vote vote: votes) {
-            jsonArray.put(vote.jsonify());
-        }
-
-        jsonObject.put("votes", voteArray);
-
-        return jsonObject;
-    }
-
-    public String serialise(){
-        return jsonify().toString();
-    }
-
 }

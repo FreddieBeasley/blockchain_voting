@@ -1,10 +1,12 @@
 package network.nodes;
 
-import CryptographyUtils;
+import util.CryptographyUtils;
+import network.messageHandling.*;
 
-import java.security.PublicKey;
 import java.security.PrivateKey;
 import java.security.KeyPair;
+
+import org.json.JSONObject;
 
 public class LocalNode extends Node {
     // Inherited Fields
@@ -19,12 +21,19 @@ public class LocalNode extends Node {
     private final PrivateKey privateKey;
 
     // Initialisation
-    public LocalNode(String host, int port) {
+    public LocalNode(String host, int port) throws Exception {
         super(host, port);
 
         KeyPair keyPair = CryptographyUtils.generateKeyPair();
         this.publicKey = keyPair.getPublic();
         this.privateKey = keyPair.getPrivate();
+    }
+
+    // Messages
+    public String signMessage(JSONObject data) throws Exception {
+        // Validate data
+        String serialiseVote = VoteMessageParser.JSONToVote(data).serialise();
+        return CryptographyUtils.sign(serialiseVote, privateKey);
     }
 
     // Override
