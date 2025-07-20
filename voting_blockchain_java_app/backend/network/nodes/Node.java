@@ -7,12 +7,13 @@ public abstract class Node {
     // Fields
     protected final String host;
     protected final int port;
-    protected final PublicKey publicKey;
+    protected PublicKey publicKey;
 
     // Initialisation
     public Node(String host, int port) {
         this.host = host;
         this.port = port;
+        this.publicKey = null;
     }
 
     // Getters
@@ -29,7 +30,7 @@ public abstract class Node {
     }
 
     // Methods
-    public abstact boolean isLocal()
+    public abstract boolean isLocal();
 
     // Override
     @Override
@@ -45,7 +46,5 @@ public abstract class Node {
         Node foreignNode = (Node) o;
         return host.equals(foreignNode.host) && port == foreignNode.port;
     }
-
-
 
 }

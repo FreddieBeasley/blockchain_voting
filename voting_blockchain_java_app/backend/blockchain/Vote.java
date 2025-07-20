@@ -1,16 +1,14 @@
 package blockchain;
 
-import java.security.PublicKey;
-import java.security.PrivateKey;
-import java.security.Signature;
+import java.security.*;
 import java.util.Base64;
-import org.json.JSONObject;
+import util.CryptographyUtils;
 
 public class Vote {
 
     // Fields
-    private publicKey voter;
-    private int voteValue;
+    private final PublicKey voter;
+    private final int voteValue;
     private String signature;
 
     // Initialisation ( for creating  a vote)
@@ -27,7 +25,7 @@ public class Vote {
     }
 
     // Getters
-    public publicKey getVoter() {
+    public PublicKey getVoter() {
         return voter;
     }
 
@@ -73,19 +71,7 @@ public class Vote {
         }
     }
 
-    public JSONObject jsonify(){
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("voter", voter);
-        jsonObject.put("vote", voteValue);
-        if (signature != null) {
-            jsonObject.put("signature", signature);
-        }
-
-        return jsonObject;
-
-    }
-
-    public String serialise(){
-        return jsonify().toString();
+    public String serialise() throws Exception{
+            return CryptographyUtils.publicKeyToString(voter) + "|||" + voteValue + "|||" + signature;
     }
 }

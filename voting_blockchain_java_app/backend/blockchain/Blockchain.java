@@ -3,27 +3,24 @@ package blockchain;
 import java.security.PublicKey;
 import java.util.ArrayList; // dynamic list
 import java.util.List;
-import java.util.Queue;
-import java.util.Set;
 
-public class Blockchain {
+public class Blockchain{
 
     // Fields
     private final int difficulty = 4;
-    private List<Block> chain;
-    private Queue<Vote> pendingVotes;
-    private Set<PublicKey> remainingVoters;
-
+    private final List<Block> chain;
+    private final PendingVotes pendingVotes;
+    private final RemainingVoters remainingVoters;
     // Initialisation
     public Blockchain() {
         this.chain = new ArrayList<>();
-        this.pendingVotes = new LinkedList<>();
-        this.remainingVoters = new HashSet<>();
+        this.pendingVotes = new PendingVotes();
+        this.remainingVoters = new RemainingVoters();
 
         chain.add(new Block("0".repeat(difficulty), new ArrayList<>()));
     }
 
-    // Getters
+    // Getters - may not be needed
     public int getDifficulty() {
         return difficulty;
     }
@@ -32,35 +29,36 @@ public class Blockchain {
         return chain;
     }
 
-    public Queue<Vote> getPendingVotes() {
-        return pendingVotes;
-    }
-
-    public Set<PublicKey> getRemainingVoters() {
-        return remainingVoters;
-    }
-
     // Methods
+    public void addNewVote(Vote newVote) {
+        pendingVotes.addVote(newVote);
+        // make persistent
+    }
+
     public boolean createNewBlock(){
         if (pendingVotes.isEmpty()){
             System.out.println("No pending votes");
             return false;
         }
 
-        list<Vote> votesForBlock = new ArrayList<>();
-        list<Vote> discardedVotes = new ArrayList<>();
+        // Segregate Valid & Invalid votes
+        List<Vote> votesForBlock = new ArrayList<>();
+        List<Vote> discardedVotes = new ArrayList<>();
+
         // Implement vote tracking
 
         while(!pendingVotes.isEmpty()){
-            Vote vote = pendingVotes.poll(); // removed and returns queue head
+            Vote vote = pendingVotes.pollVote();
             PublicKey voterKey = vote.getVoter();
 
-            if (!remainingVoters.contains(voterKey)) {
+            if (!vote.isValid()) {
+                System.out.println("Invalid vote");
+                discardedVotes.add(vote);
+            } else if (remainingVoters.removeVoter(voterKey)) {
+                votesForBlock.add(vote);
+            } else{
                 System.out.println("Voter has already voted or has not registered: " + voterKey);
                 discardedVotes.add(vote);
-            } else{
-                votesForBlock.add(vote);
-                remainingVoters.remove(voterKey);
             }
         }
 
@@ -69,20 +67,31 @@ public class Blockchain {
             return false;
         }
 
+        // Create
         Block lastBlock = getLastBlock();
         Block newBlock = new Block(lastBlock.getHash(), votesForBlock);
+
+        // Mine
         newBlock.mineBlock(difficulty);
+
+        // Add
         chain.add(newBlock);
 
-        System.out.println("Block successfully mined.")
+        // Make Persistent
+
+        // Log
+        System.out.println("Block successfully mined - invalid votes discarded from: ");
+        for (Vote vote : discardedVotes){
+            System.out.println(vote.getVoter());
+        }
 
         return true;
 
     }
 
-    private Block getLastBlock(){
+    public Block getLastBlock(){
         // Not useful to be public
-        return chain.get(chain.size()-1);
+        return chain.getLast();
     }
 
     public Boolean isValid() {
@@ -100,8 +109,8 @@ public class Blockchain {
 
             // Verify Blocks
             for (Block block : chain) {
-                if (!block.isValid()) {
-                    System.out.println("Blockchain verification failed: Invalid block");
+                if (!block.isValid(difficulty)) {
+                    System.out.println("Blockchain verification failed: Invalid block with hash: " + block.getHash());
                     return false;
                 }
             }
@@ -109,8 +118,7 @@ public class Blockchain {
             return true;
         } catch (Exception e) {
             System.err.println("Block verification failed: " + e.getMessage());
+            return false;
         }
     }
-
-
 }
