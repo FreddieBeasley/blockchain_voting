@@ -1,5 +1,6 @@
-// Creates legit messages to be broadcasted therefore preventing malicious nodes from doing so.
+// Created messages to be sent
+package network;
 
-public class MessageFactory
-{
+public class MessageFactory {
+     
 }

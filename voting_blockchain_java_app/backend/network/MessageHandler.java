@@ -1,1 +1,6 @@
-// Interprets and verifys messages
+// Handles received messages
+package network;
+
+public class MessageHandler{
+
+}

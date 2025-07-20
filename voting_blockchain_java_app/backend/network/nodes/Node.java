@@ -43,8 +43,8 @@ public abstract class Node {
         if (!(o instanceof Node)) {
             return false;
         }
-        Node foreignNode = (Node) o;
-        return host.equals(foreignNode.host) && port == foreignNode.port;
+        Node node = (Node) o;
+        return host.equals(node.host) && port == node.port;
     }
 
 }
