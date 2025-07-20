@@ -25,10 +25,4 @@ public class RemainingVoters {
         return remainingVoters.remove(publicKey);
     }
 
-
-
-
-
-
-
 }
