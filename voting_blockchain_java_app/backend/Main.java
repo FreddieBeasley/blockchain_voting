@@ -1,10 +1,10 @@
 import blockchain.*;
-import network.messageHandling.BlockMessageParser;
+import util.ParserUtils;
 
 
 public class Main{
     public static void main(String[] args) throws Exception{
-        Blockchain blockchain = new Blockchain();
-        System.out.println(BlockMessageParser.BlockToJSON(blockchain.getLastBlock()));
+        Blockchain blockchain = new Blockchain(); // will attempt to load all for
+        System.out.println(ParserUtils.BlockToJSON(blockchain.getLastBlock()));
     }
 }
