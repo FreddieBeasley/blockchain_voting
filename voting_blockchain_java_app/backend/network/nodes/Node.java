@@ -25,6 +25,10 @@ public abstract class Node {
         return port;
     }
 
+    public String getNodeID() {
+        return getHost() + ":" + getPort();
+    }
+
     public PublicKey getPublicKey() {
         return publicKey;
     }
@@ -44,7 +48,7 @@ public abstract class Node {
             return false;
         }
         Node node = (Node) o;
-        return host.equals(node.host) && port == node.port;
+        return getNodeID().equals(node.getNodeID());
     }
 
 }

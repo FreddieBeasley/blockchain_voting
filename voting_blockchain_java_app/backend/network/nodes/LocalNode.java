@@ -1,12 +1,14 @@
 package network.nodes;
 
 import util.CryptographyUtils;
-import network.messageHandling.*;
+import util.ParserUtils;
 
 import java.security.PrivateKey;
 import java.security.KeyPair;
 
 import org.json.JSONObject;
+
+import javax.swing.text.html.parser.Parser;
 
 public class LocalNode extends Node {
     // Inherited Fields
@@ -32,7 +34,7 @@ public class LocalNode extends Node {
     // Messages
     public String signMessage(JSONObject data) throws Exception {
         // Validate data
-        String serialiseVote = VoteMessageParser.JSONToVote(data).serialise();
+        String serialiseVote = ParserUtils.JSONToVote(data).serialise();
         return CryptographyUtils.sign(serialiseVote, privateKey);
     }
 

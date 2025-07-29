@@ -1,36 +1,16 @@
-// Responsible for sending ( postman )
+// Handles the sending of messages  to other peers on the network
 
-/*
-
- */
+package network;
 
 import java.io.*;
 import java.net.*;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 
 // Driver Class
 public class Client{
-
-    public static void main(String[] args) {
-        try{
-            // Initialise client
-            Socket socket = new Socket("localhost", 1000);
-            System.out.println("Connected to the server");
-
-            // Open input and output streams
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-            // Send data
-            out.println("data");
-            String response = in.readLine();
-            System.out.println("Server Response: " + response);
-
-            // Close connections
-            in.close();
-            out.close();
-            socket.close();
-        } catch (IOException e){
-            System.out.println("Server Error: " + e.getMessage());
-        }
-    }
+    private String host;
+    private int port;
+    private PublicKey publicKey;
+    private PrivateKey privateKey;
 }

@@ -1,6 +1,6 @@
 // Handles received messages
 package network;
 
-public class MessageHandler{
+public class MessageIn {
 
 }

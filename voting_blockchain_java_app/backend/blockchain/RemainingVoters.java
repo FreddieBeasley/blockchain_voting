@@ -1,16 +1,27 @@
 package blockchain;
 
+import util.FileHandlingUtils;
+
+import org.json.JSONArray;
+
+import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.security.PublicKey;
 
 public class RemainingVoters {
     // Fields
-    private final Set<PublicKey> remainingVoters;
+    private Set<PublicKey> remainingVoters = new HashSet<>();
+    private final File persistentStorage = new File("data/remaining_voters.json");
 
     // Initialisation
     public RemainingVoters() {
-        this.remainingVoters = new HashSet<>(); // should load from persistent file
+        load();
+    }
+
+    public RemainingVoters(Set<PublicKey> remainingVoters) {
+        this.remainingVoters = remainingVoters;
     }
 
     /*
@@ -19,10 +30,42 @@ public class RemainingVoters {
     this may occur in a different program before the blockchain/voting is live
      */
 
-    // Methods
-
-    public boolean removeVoter(PublicKey publicKey){
-        return remainingVoters.remove(publicKey);
+    // Getter Method
+    public Set<PublicKey> getVoters(){
+        return remainingVoters;
     }
+
+
+    // Persistent Methods
+    public void persist(){
+        JSONArray jsonArray = new JSONArray();
+        for (PublicKey remainingVoter : remainingVoters){
+            jsonArray.put(remainingVoter);
+        }
+        FileHandlingUtils.writeToJSONFile(persistentStorage.getPath(), jsonArray);
+    }
+
+    public void load(){
+        try {
+            JSONArray jsonArray = (JSONArray) FileHandlingUtils.readFromJSONFile(persistentStorage.getPath());
+            assert jsonArray != null: "No content to load from";
+            for (Object tempObject : jsonArray) {
+                remainingVoters.add((PublicKey) tempObject);
+            }
+        } catch (AssertionError e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    // Standard Methods
+    public boolean removeVoter(PublicKey publicKey){
+        if (remainingVoters.remove(publicKey)){
+            persist();
+            return true;
+        }
+        return false;
+    }
+
+
 
 }
