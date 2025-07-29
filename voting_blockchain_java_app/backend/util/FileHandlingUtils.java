@@ -134,7 +134,7 @@ public class FileHandlingUtils {
             String string = stringBuilder.toString().trim();
 
             if (string.isEmpty()) {
-                System.out.println("Empty JSON file.");
+                System.out.println("Empty JSON file: "  + filePath);
                 return null;
             }
 
