@@ -11,7 +11,9 @@ import org.json.JSONObject;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ParserUtils {
     // Votes
@@ -79,27 +81,45 @@ public class ParserUtils {
 
     // Blockchains
     public static Blockchain JSONToBlockchain(JSONObject data) throws Exception {
+        // Difficulty
         int difficulty = data.getInt("difficulty");
 
+        // Chain
         List<Block> blockList = new ArrayList<>();
         for (Object object: data.getJSONArray("chain")){
             JSONObject JSONBlock = (JSONObject) object;
             Block newBlock = JSONToBlock(JSONBlock);
             blockList.add(newBlock);
         }
-        return new Blockchain(blockList, difficulty);
+        // Remaining Voters
+        Set<PublicKey> remainingVoters = new HashSet<>();
+        for (Object object: data.getJSONArray("remainingVoters")){
+            PublicKey voter = (PublicKey) object;
+            remainingVoters.add(voter);
+        }
+
+        return new Blockchain(blockList, difficulty, remainingVoters);
     }
 
     public static JSONObject BlockchainToJSON(Blockchain blockchain) throws Exception {
         JSONObject jsonObject = new JSONObject();
 
+        // Difficulty
         jsonObject.put("difficulty", blockchain.getDifficulty());
 
+        // Chain
         JSONArray JSONChain = new JSONArray();
         for (Block block: blockchain.getChain()) {
             JSONChain.put(BlockToJSON(block));
         }
         jsonObject.put("chain", JSONChain);
+
+        // Remaining Voters
+        JSONArray JSONRemainingVoters = new JSONArray();
+        for (PublicKey voter: blockchain.getRemainingVoters()) {
+            JSONRemainingVoters.put(voter);
+        }
+        jsonObject.put("remainingVoters", JSONRemainingVoters);
 
         return jsonObject;
     }

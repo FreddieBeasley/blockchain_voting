@@ -7,10 +7,7 @@ import util.ParserUtils;
 
 import java.io.File;
 import java.security.PublicKey;
-import java.util.ArrayList; // dynamic list
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public class Blockchain{
 
@@ -18,31 +15,32 @@ public class Blockchain{
     private int difficulty;
     private final List<Block> chain;
     private final PendingVotes pendingVotes;
-    private RemainingVoters remainingVoters;
+    private final Set<PublicKey> remainingVoters;
     private final File persistentStorage = new File("data/blockchain.json");
 
     // Initialisation
     public Blockchain() {
             this.chain = new ArrayList<>();
+            this.remainingVoters = new HashSet<>();
+
             this.pendingVotes = new PendingVotes();
-            this.remainingVoters = new RemainingVoters();
             this.difficulty = 4;
 
             load();
     }
 
     // Used for tempBlockchain when loading in from persistent storage
-    public Blockchain(List<Block> chain, int difficulty) {
+    public Blockchain(List<Block> chain, int difficulty,  Set<PublicKey> remainingVoters) {
         this.chain = chain;
-        this.difficulty = difficulty;
+        this.remainingVoters = remainingVoters;
         this.pendingVotes = new PendingVotes();
-        this.remainingVoters = new RemainingVoters();
+        this.difficulty = difficulty;
     }
 
     private void persist(){
         try {
-            JSONObject JSONBlockchain = ParserUtils.BlockchainToJSON(this);
-            FileHandlingUtils.writeToJSONFile(persistentStorage.getPath(),JSONBlockchain);
+           JSONObject persistentJSON = ParserUtils.BlockchainToJSON(this);
+           FileHandlingUtils.writeToJSONFile(persistentStorage.getPath(), persistentJSON);
 
         } catch (Exception e) {
             System.out.println("Persisting Blockchain failed: " + e.getMessage());
@@ -51,18 +49,27 @@ public class Blockchain{
     }
     private void load(){
         try{
-            JSONObject JSONBlockchain = (JSONObject) FileHandlingUtils.readFromJSONFile(persistentStorage.getPath());
-            assert JSONBlockchain != null;
+          JSONObject persistentJSON = (JSONObject) FileHandlingUtils.readFromJSONFile(persistentStorage.getPath());
 
-            Blockchain tempBlockchain = ParserUtils.JSONToBlockchain(JSONBlockchain);
+          if (persistentJSON == null){
+                System.out.println("No valid content to load from");
+                chain.add(new Block("0".repeat(difficulty), new ArrayList<>()));
+                return;
+          }
 
-            if (!tempBlockchain.isValid()){
-                throw new Exception("Invalid persisted Blockchain not adopted");
-            }
-            // load chain
-            chain.clear();
-            chain.addAll(tempBlockchain.getChain());
-            difficulty = tempBlockchain.getDifficulty();
+          Blockchain tempBlockchain = ParserUtils.JSONToBlockchain(persistentJSON);
+
+          if (tempBlockchain.isValid()){
+              difficulty = tempBlockchain.getDifficulty();
+
+              chain.clear();
+              chain.addAll(tempBlockchain.getChain());
+
+              remainingVoters.clear();
+              remainingVoters.addAll(tempBlockchain.getRemainingVoters());
+          } else{
+              throw new Exception("Blockchain could not be loaded");
+          }
 
         } catch(Exception e){
             System.out.println(e.getMessage());
@@ -86,11 +93,16 @@ public class Blockchain{
             System.out.println("Consensus failed: new blockchain is not valid");
             return false;
         }
+
+        difficulty = blockchain.getDifficulty();
+
         chain.clear();
         chain.addAll(blockchain.getChain());
-        difficulty = blockchain.getDifficulty();
-        remainingVoters = new RemainingVoters(blockchain.getRemainingVoters());
-        // PendingVotes does not need to updates as repeated votes will automatically be discarded on block creation
+
+        remainingVoters.clear();
+        remainingVoters.addAll(blockchain.getRemainingVoters());
+
+        // PendingVotes will handle itself when a new block is created
 
         persist();
         return true;
@@ -106,7 +118,7 @@ public class Blockchain{
     }
 
     public Set<PublicKey> getRemainingVoters() {
-        return remainingVoters.getVoters();
+        return remainingVoters;
     }
 
     public Queue<Vote> getPendingVotes(){
@@ -118,10 +130,17 @@ public class Blockchain{
     }
 
     public Block getLastBlock(){
-        return chain.getLast();
+        if (chain.isEmpty()){
+            return null;
+        }
+        return chain.get(chain.size()-1);
     }
 
     // Methods
+    private boolean removeVoter(PublicKey voter){
+        return remainingVoters.remove(voter);
+    }
+
     public void addNewVote(Vote newVote) {
         pendingVotes.addVote(newVote);
     }
@@ -145,7 +164,7 @@ public class Blockchain{
             if (!vote.isValid()) {
                 System.out.println("Invalid vote");
                 discardedVotes.add(vote);
-            } else if (remainingVoters.removeVoter(voterKey)) {
+            } else if (removeVoter(voterKey)) {
                 votesForBlock.add(vote);
             } else{
                 System.out.println("Voter has already voted or has not registered: " + voterKey);

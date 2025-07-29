@@ -47,11 +47,17 @@ public class PendingVotes {
     private void load(){
         try {
              JSONArray jsonArray = (JSONArray)  FileHandlingUtils.readFromJSONFile(persistentStorage.getPath());
-             assert jsonArray != null: "No content to load from";
+
+             if (jsonArray == null){
+                 System.out.println("No valid content to load from");
+                 return;
+             }
+
              for (Object tempObject : jsonArray) {
                  JSONObject tempJSONObject = (JSONObject) tempObject;
                  pendingVotes.add(new Vote( (PublicKey)  tempJSONObject.get("Voter"),  tempJSONObject.getInt("VoteValue"),  tempJSONObject.getString("Signature")));
              }
+
         } catch (AssertionError e) {
             System.out.println(e.getMessage());
         }
