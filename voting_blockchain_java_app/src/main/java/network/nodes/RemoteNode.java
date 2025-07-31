@@ -12,7 +12,7 @@ public class RemoteNode extends Node {
      */
 
     // Initialisation
-    public RemoteNode(String host, int port, PublicKey publicKey) {
+    public RemoteNode(String host, int port, String publicKey) {
         super(host, port);
 
         this.publicKey = publicKey;

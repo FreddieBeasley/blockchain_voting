@@ -25,7 +25,7 @@ public class LocalNode extends Node {
         super(host, port);
 
         KeyPair keyPair = CryptographyUtils.generateKeyPair();
-        this.publicKey = keyPair.getPublic();
+        this.publicKey = CryptographyUtils.publicKeyToString(keyPair.getPublic());
         this.privateKey = keyPair.getPrivate();
     }
 
