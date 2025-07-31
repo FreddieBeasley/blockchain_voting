@@ -1,14 +1,23 @@
 package blockchain;
 
+// JSON formatting
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+// Logging
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.*; // List, ArrayList, Set, HashSet, Queue
+
+// Local Packages
 import util.CryptographyUtils;
 import util.FileHandlingUtils;
 import util.ParserUtils;
 
-import java.io.File;
-import java.util.*;
+
 
 public class Blockchain{
 
@@ -19,6 +28,10 @@ public class Blockchain{
     private final Set<String> remainingVoters;
     private final File persistentStorage = new File("data/blockchain.json");
     private final File registeredVoters = new File("data/registeredVoters.json");
+
+    private static final Logger log = LoggerFactory.getLogger(Blockchain.class);
+
+
 
     // Initialisation
     public Blockchain() {
@@ -50,12 +63,18 @@ public class Blockchain{
 
     }
     private void load(){
-        try{
-          JSONObject persistentJSON = (JSONObject) FileHandlingUtils.readFromJSONFile(persistentStorage.getPath());
+        JSONObject persistentJSON = (JSONObject) FileHandlingUtils.readFromJSONFile(persistentStorage.getPath());
+        if (persistentJSON == null){
+            log.info("No content to load from");
+        }
 
-          if (persistentJSON == null){
-               throw new Exception("No valid content to load from");
-          }
+        else { //Blockchain has been loaded
+            try {
+                Blockchain tempBlockchain = ParserUtils.JSONToBlockchain(persistentJSON)
+            } catch (JSONException je Exception e)
+        }
+
+        try{
 
           Blockchain tempBlockchain = ParserUtils.JSONToBlockchain(persistentJSON);
 

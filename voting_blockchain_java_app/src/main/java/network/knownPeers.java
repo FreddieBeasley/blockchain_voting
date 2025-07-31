@@ -9,6 +9,7 @@ import util.FileHandlingUtils;
 // Imported packages
 import org.json.JSONArray;
 import org.json.JSONObject;
+import util.ParserUtils;
 
 // Included packages
 import java.security.PublicKey;
@@ -54,7 +55,7 @@ public class knownPeers{
             assert jsonArray != null : "No content to load from";
             for (Object tempObject : jsonArray) {
                 JSONObject tempJSONObject = (JSONObject) tempObject;
-                knownPeers.add(new RemoteNode(tempJSONObject.getString("Host"), tempJSONObject.getInt("Port"), (PublicKey) tempJSONObject.get("PublicKey")));
+                knownPeers.add(ParserUtils.JSONObjectToNode(tempJSONObject));
             }
         } catch (AssertionError e) {
             System.out.println(e.getMessage());
