@@ -1,36 +1,41 @@
 package blockchain;
 
 import java.security.*;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 import util.CryptographyUtils;
 
 public class Vote {
 
     // Fields
-    private final PublicKey voter;
+    private final String voter;
     private final int voteValue;
     private String signature;
 
     // Initialisation ( for creating  a vote)
-    public Vote(PublicKey voter, int voteValue) {
+    public Vote(String voter, int voteValue) {
         this.voter = voter;
         this.voteValue = voteValue;
     }
 
     // Initialisation ( for restoring a vote send throw the network )
-    public Vote(PublicKey voter, int voteValue, String signature) {
+    public Vote(String voter, int voteValue, String signature) {
         this.voter = voter;
         this.voteValue = voteValue;
         this.signature = signature;
     }
 
     // Getters
-    public PublicKey getVoter() {
+    public String getVoter() {
         return voter;
     }
 
-    public String getVoterAsString(){
-        return Base64.getEncoder().encodeToString(voter.getEncoded());
+    public PublicKey getVoterAsPublicKey(){
+        try {
+            return CryptographyUtils.stringToPublicKey(voter);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e){
+            throw new RuntimeException(e);
+        }
     }
 
     public int  getVoteValue() {
@@ -44,7 +49,7 @@ public class Vote {
     // Methods
     public void signVote(PrivateKey privateKey) {
         try{
-            String data = getVoterAsString() + voteValue;
+            String data = voter + voteValue;
 
             Signature signer = Signature.getInstance("SHA256withRSA"); // Signature object for SHA-256
             signer.initSign(privateKey); // Initialises object for signing ( with given private key )
@@ -58,10 +63,10 @@ public class Vote {
 
     public boolean isValid() {
         try {
-            String data = getVoterAsString() + voteValue;
+            String data = voter + voteValue;
 
             Signature verifier = Signature.getInstance("SHA256withRSA"); // Signature object for SHA-256
-            verifier.initVerify(voter); // Initialises the object for verification ( with expected signers public_key )
+            verifier.initVerify(getVoterAsPublicKey()); // Initialises the object for verification ( with expected signers public_key )
             verifier.update(data.getBytes()); // Updates data to be verified ( with expected vote data )
 
             return verifier.verify(Base64.getDecoder().decode(signature));
@@ -72,6 +77,6 @@ public class Vote {
     }
 
     public String serialise() throws Exception{
-            return CryptographyUtils.publicKeyToString(voter) + "|||" + voteValue + "|||" + signature;
+            return voter + "|||" + voteValue + "|||" + signature;
     }
 }

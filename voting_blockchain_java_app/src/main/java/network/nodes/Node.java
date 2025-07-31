@@ -1,13 +1,17 @@
 package network.nodes;
 
+import util.CryptographyUtils;
+
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 
 public abstract class Node {
 
     // Fields
     protected final String host;
     protected final int port;
-    protected PublicKey publicKey;
+    protected String publicKey;
 
     // Initialisation
     public Node(String host, int port) {
@@ -29,8 +33,16 @@ public abstract class Node {
         return getHost() + ":" + getPort();
     }
 
-    public PublicKey getPublicKey() {
+    public String getPublicKey() {
         return publicKey;
+    }
+
+    public PublicKey getPublicKeyAsPublicKey() {
+        try {
+            return CryptographyUtils.stringToPublicKey(publicKey);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e){
+            throw new RuntimeException(e);
+        }
     }
 
     // Methods

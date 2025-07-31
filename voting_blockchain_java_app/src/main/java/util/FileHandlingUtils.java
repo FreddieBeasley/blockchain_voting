@@ -75,28 +75,52 @@ public class FileHandlingUtils {
      */
 
     // JSON methods
-    public static boolean writeToJSONFile(String filePath, Object JSONdata) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            if (JSONdata instanceof JSONObject) {
-                writer.write(((JSONObject) JSONdata).toString(4));
-            } else if (JSONdata instanceof JSONArray) {
-                writer.write(((JSONArray) JSONdata).toString(4));
-            } else {
-                throw new IllegalArgumentException("Object data type not supported");
+    public static void writeToJSONFile(String filePath, Object data) throws IOException, IllegalArgumentException{
+            if (!(data instanceof JSONArray) || !(data instanceof JSONObject)){
+                throw new IllegalArgumentException("Date must be of type JSONArray or JSONObject");
             }
 
-            // log
-            System.out.println("JSON written to : " + filePath);
-            return true;
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));) {
+                if (data instanceof JSONArray) {
+                    writer.write(new JSONArray((JSONArray) data).toString());
+                } else {
+                    writer.write(new JSONObject(data.toString()).toString());
+                }
+            }
+    }
 
-        } catch (IOException | IllegalArgumentException e) {
-            System.out.println("Failed to write json to " + filePath + ": " + e.getMessage());
-            return false;
+    public static Object readFromJSONFile(String filePath) throws IOException, JSONException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
+            StringBuilder stringBuilder = new StringBuilder(); // Mutable string
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+
+            String fileContents = stringBuilder.toString().trim();
+
+            if (fileContents.isEmpty()) {
+                throw new JSONException("Empty JSON file" + filePath);
+            }
+
+            char firstChar = fileContents.charAt(0);
+
+            if (firstChar == '[') {
+                return new JSONArray(fileContents);
+            }
+
+            if (firstChar == '{') {
+                return new JSONObject(fileContents);
+            }
+
+            throw new JSONException("Invalid JSON format in file" + filePath);
         }
     }
 
-    public static boolean appendToJSONFileArray(String filePath, Object JSONdata){
-        // Loading JSONArray from file
+    public static void appendToJSONFileArray(String filePath, Object data) throws IOException, JSONException, IllegalArgumentException {
+        // read json array from file
         Object json = readFromJSONFile(filePath);
         JSONArray jsonArray;
 
@@ -105,79 +129,28 @@ public class FileHandlingUtils {
         } else if (json == null){
             jsonArray = new JSONArray();
         } else {
-            return false;
+            throw new JSONException("Invalid JSON format in file" + filePath);
         }
 
-        // Appending JSONData to the JSONArray
-        if (JSONdata instanceof JSONObject) {
-            JSONObject currentObject = (JSONObject) JSONdata;
-            jsonArray.put(currentObject);
-        } else if (JSONdata instanceof String) {
-            String currentString = (String) JSONdata;
-            jsonArray.put(currentString);
+        // Append data to json array
+        if (data instanceof JSONObject || data instanceof String){
+            jsonArray.put(data);
         } else {
-            throw new JSONException("Object data type not supported");
+            throw new IllegalArgumentException("Unsupported data type for appending to JSON array");
         }
 
-        // Writing JSONArray back to file
-        if (writeToJSONFile(filePath, jsonArray)){
-            System.out.println("JSON appended to: " + filePath);
-            return true;
-        }
-        System.out.println("Failed to appened JSON to: " + filePath);
-        return false;
-
+        // Write new json array to file
+        writeToJSONFile(filePath, jsonArray);
     }
 
-
-    public static Object readFromJSONFile(String filePath) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-
-            StringBuilder stringBuilder = new StringBuilder(); // Mutable string
-
-            String currentLine;
-            while ((currentLine = reader.readLine()) != null) {
-                stringBuilder.append(currentLine);
-            }
-
-            String string = stringBuilder.toString().trim();
-
-            if (string.isEmpty()) {
-                System.out.println("Empty JSON file: "  + filePath);
-                return null;
-            }
-
-            char firstChar = string.charAt(0);
-
-            try {
-                if (firstChar == '{') {
-                    JSONObject jsonObject = new JSONObject(string);
-                    System.out.println("JSONObject read from : " + filePath);
-                    return jsonObject;
-                } else if (firstChar == '[') {
-                    JSONArray jsonArray = new JSONArray(string);
-                    System.out.println("JSONArray read from : " + filePath);
-                    return jsonArray;
-                } else {
-                    throw new JSONException("Invalid JSON format in file: " + filePath);
-                }
-            } catch (JSONException e) {
-                System.out.println("Invalid JSON format in file: " + filePath);
-                return null;
-            }
-
-        } catch (IOException e) {
-            System.out.println("Failed to read json from " + filePath + ": " + e.getMessage());
-            return null;
+    public static void removeFromJSONFileArray(String filePath, String ID) throws IOException, JSONException {
+        if (ID == null) {
+            throw new IllegalArgumentException("ID cannot be null");
         }
-    }
 
-    public static boolean removeFromJSONFileArray(String filePath, String ID) {
-        // Loading JSONArray from file
         Object json = readFromJSONFile(filePath);
         if (!(json instanceof JSONArray)) {
-            System.out.println("File does not contain a JSON array.");
-            return false;
+            throw new JSONException("Invalid JSON format in file" + filePath);
         }
 
         JSONArray currentArray = (JSONArray) json;
@@ -189,23 +162,20 @@ public class FileHandlingUtils {
 
             if (item instanceof JSONObject) {
                 JSONObject jsonObject = (JSONObject) item;
-                // If ID field doesn't match, keep the object
-                if (!ID.equals(jsonObject.get("ID"))) {
+                if (ID.equals(jsonObject.getString("ID"))) {
                     newArray.put(jsonObject);
                 }
-            } else if (item instanceof String) {
+            } else if (item instanceof String){
                 String string = (String) item;
-                // If string doesn't match, keep it
-                if (!ID.equals(string)) {
-                    newArray.put(string);
+                if (ID.equals(string)) {
+                    newArray.put(item);
                 }
             } else {
-                // If item is neither JSONObject nor String, preserve it unchanged
-                throw new JSONException("Invalid item type in JSONArray at index " + i + " in file: " + filePath);
+                throw new JSONException("Invalid JSON format in file" + filePath);
             }
         }
 
         // Writing filtered JSONArray back to file
-        return writeToJSONFile(filePath, newArray);
+        writeToJSONFile(filePath, newArray);
     }
 }

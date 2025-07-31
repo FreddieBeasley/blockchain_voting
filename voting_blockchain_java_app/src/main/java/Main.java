@@ -8,11 +8,16 @@ import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Main{
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
     public static KeyPair register(){
         KeyPair keypair = CryptographyUtils.generateKeyPair();
         if (keypair == null){
-            System.out.println("KeyPair generation failed");
+            logger.error("KeyPair generation failed");
             return null;
         }
 
@@ -21,21 +26,24 @@ public class Main{
 
         FileHandlingUtils.appendToJSONFileArray("data/registeredVoters.json", CryptographyUtils.publicKeyToString(publicKey));
 
+        logger.info("Key pair registered successfully");
         return keypair;
     }
 
     public static Vote createVote(PublicKey publicKey, PrivateKey privateKey, int voteValue){
         Vote newVote = new Vote(publicKey,voteValue);
         newVote.signVote(privateKey);
+        logger.info("Vote created");
         return newVote;
     }
 
     public static void main(String[] args) throws Exception{
-        System.out.println("\n------------ Registering to Vote ------------\n");
+        logger.info("main started");
+
+
         KeyPair myKeys = register();
         PublicKey myPublicKey = myKeys.getPublic();
         PrivateKey myPrivateKey = myKeys.getPrivate();
-        System.out.println("\n------------ Registering to Vote ------------\n");
 
         System.out.println("------------ Initialising Blockchain ------------\n");
         Blockchain blockchain = new Blockchain();
