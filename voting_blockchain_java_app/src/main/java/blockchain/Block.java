@@ -64,12 +64,7 @@ public class Block {
             throw new IllegalStateException("SHA-256 algorithm is not available");
         }
 
-        StringBuilder voteData = new StringBuilder();
-        for (Vote vote: votes){
-            voteData.append(vote.serialise());
-        }
-
-        String data = previousHash + timestamp + voteData + nonce;
+       String data = serialise();
 
         md.update(data.getBytes()); // Passes byte array to the message digest object
         byte[] digest = md.digest(); // Generates message digest as byte array
@@ -82,19 +77,20 @@ public class Block {
         String prefix = "0".repeat(difficulty);
 
         while (!hash.startsWith(prefix)) {
+            nonce++;
             hash = computeHash();
 
             if (hash == null) {
                 System.err.println("Hash computation failed. Mining aborted.");
             }
 
-            nonce++;
         }
 
         System.out.println("Block successfully mined.");
     }
 
     public void isValid(int difficulty) throws InvalidBlockException {
+
         // Verify block hash
         String computedHash = computeHash();
         if (!computedHash.equals(hash)){
@@ -115,6 +111,17 @@ public class Block {
                 throw new InvalidBlockException("Invalid vote from : " + vote.getVoter(), e);
             }
         }
+    }
 
+    public String serialise() {
+        StringBuilder sb = new StringBuilder();
+        for (Vote vote: votes){
+            sb.append(vote.serialise());
+        }
+        return sb.toString() + "||||||" + previousHash + "||||||" + timestamp + "||||||" + nonce;
+    }
+
+    public String serialiseWithHash(){
+        return serialise() + "||||||" + hash;
     }
 }

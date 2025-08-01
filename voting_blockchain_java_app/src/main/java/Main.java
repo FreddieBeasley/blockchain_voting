@@ -50,20 +50,13 @@ public class Main{
 
         Blockchain blockchain = new Blockchain();
 
-        System.out.println("\n------------ Log Genesis Block ------------\n");
-        System.out.println(ParserUtils.BlockToJSON(blockchain.getLastBlock()));
-        System.out.println("\n------------ Log Genesis Block ------------\n");
+
+        logger.info("Last block of blockchain: " + ParserUtils.BlockToJSON(blockchain.getLastBlock()));
 
         Vote myVote = createVote(myPublicKey,myPrivateKey,3);
         blockchain.addNewVote(myVote);
 
-        System.out.println("\n------------ Blockchain Mining Vote ------------\n");
         blockchain.createNewBlock();
-        System.out.println(blockchain.getLastBlock().getHash());
-        System.out.println("\n------------ Blockchain Mining Vote ------------\n");
-
-
-
-
+        logger.info("Newly mined block hash: " + blockchain.getLastBlock().getHash());
     }
 }
