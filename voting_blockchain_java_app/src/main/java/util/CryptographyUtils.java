@@ -10,9 +10,9 @@ import java.security.spec.PKCS8EncodedKeySpec;
 public class CryptographyUtils {
 
     public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA"); // Returns a KeyPairGenerator that generate RSA key pairs
-        keyPairGenerator.initialize(2048);  // Initialises KeyPairGenerator for RSA 2048 ( as a pose to 1024 )
-        return keyPairGenerator.generateKeyPair(); // Returns an RSA key pair
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA"); // getInstance throws NoSuchAlgorithmException
+        keyPairGenerator.initialize(2048);
+        return keyPairGenerator.generateKeyPair();
     }
 
     public static String sign(String data, PrivateKey privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {

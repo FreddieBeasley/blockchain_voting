@@ -9,12 +9,11 @@
       <change beforePath="$PROJECT_DIR$/src/main/data/blockchain.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/blockchain.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/data/registeredVoters.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/registeredVoters.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Block.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/Block.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Blockchain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/Blockchain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/TempBlockchain.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/CryptographyUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/CryptographyUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Block.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/blockchain/Block.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Blockchain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/blockchain/Blockchain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/util/ParserUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ParserUtils.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +151,7 @@
       <workItem from="1753879202293" duration="975000" />
       <workItem from="1753881092902" duration="22517000" />
       <workItem from="1753989424725" duration="1865000" />
-      <workItem from="1753991695459" duration="22113000" />
+      <workItem from="1753991695459" duration="27302000" />
     </task>
     <servers />
   </component>
@@ -170,11 +169,6 @@
           <properties class="exceptions.InvalidBlockchainException" package="exceptions" />
           <option name="timeStamp" value="10" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/util/CryptographyUtils.java</url>
-          <line>33</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

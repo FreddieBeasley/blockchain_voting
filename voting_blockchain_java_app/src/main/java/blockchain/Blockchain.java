@@ -48,10 +48,18 @@ public class Blockchain {
 
         try {
             load();
-        } catch (Exception e) {
-            logger.warn("Unable to load blockchain: ", e);
-            initialise();
+            return;
+        } catch (IOException e) {
+            logger.info("No blockchain to load from", e);
+        } catch (MalformedJSONBlockchainException ex) {
+            logger.warn("Invalid blockchain format in persistent storage", ex);
+        } catch (InvalidBlockchainException exp) {
+            logger.warn("Invalid blockchain in persistent storage", exp);
         }
+
+        initialise();
+
+
     }
 
 
@@ -96,24 +104,18 @@ public class Blockchain {
 
     }
 
-    private void load() throws IOException {
+    private void load() throws IOException, MalformedJSONBlockchainException, InvalidBlockchainException {
         JSONObject persistentJSON = (JSONObject) FileHandlingUtils.readFromJSONFile(persistentStorage.getPath());
 
-        Blockchain tempBlockchain;
-
-        try {
-            tempBlockchain = ParserUtils.JSONToBlockchain(persistentJSON); // Throws MalformedJSONBlockchainException
-        } catch (MalformedJSONBlockchainException e) {
-            throw new IOException("Malformed blockchain stored", e);
-        } catch (NullPointerException e) {
+        if  (persistentJSON == null) {
             throw new IOException("No blockchain stored to load from");
         }
 
-        try {
-            tempBlockchain.isValid();
-        } catch (InvalidBlockchainException e) {
-            throw new IOException("Invalid blockchain stored", e);
-        }
+        Blockchain tempBlockchain;
+
+        tempBlockchain = ParserUtils.JSONToBlockchain(persistentJSON); // Throws MalformedJSONBlockchainException
+
+        tempBlockchain.isValid(); // throws InvalidBlockchainException
 
         difficulty = tempBlockchain.getDifficulty();
 
@@ -228,20 +230,20 @@ public class Blockchain {
             try{
                 vote.isValid();
             } catch(InvalidVoteException e){
-                logger.warn("Invalid vote from " + voter, e);
+                logger.warn("Invalid vote from {}", voter, e);
                 discardedVotes.add(vote.serialise());
             }
 
             if (removeVoter(voter)) {
                 votesForBlock.add(vote);
             } else {
-                logger.warn("Voter " + voter + " not found");
+                logger.warn("Voter {} not found", voter);
                 discardedVotes.add(vote.serialise());
             }
         }
 
         if (votesForBlock.isEmpty()) {
-            logger.info("No votes to add to blocchain");
+            logger.info("No votes to add to blockchain");
             return false;
         }
 
@@ -262,7 +264,7 @@ public class Blockchain {
         if (discardedVotes.isEmpty()) {
             logger.info("Block successfully created");
         } else {
-            logger.info("Block successfully created, votes discarded from: " + discardedVotes);
+            logger.info("Block successfully created, votes discarded from: {}", discardedVotes);
         }
 
         return true;
