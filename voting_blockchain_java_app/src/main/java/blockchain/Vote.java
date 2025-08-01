@@ -4,6 +4,7 @@ import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 import util.CryptographyUtils;
+import exceptions.InvalidVoteException;
 
 public class Vote {
 
@@ -61,22 +62,27 @@ public class Vote {
         }
     }
 
-    public boolean isValid() {
+    public void isValid() throws InvalidVoteException {
+        Boolean isValid;
+
         try {
             String data = voter + voteValue;
-
             Signature verifier = Signature.getInstance("SHA256withRSA"); // Signature object for SHA-256
             verifier.initVerify(getVoterAsPublicKey()); // Initialises the object for verification ( with expected signers public_key )
             verifier.update(data.getBytes()); // Updates data to be verified ( with expected vote data )
-
-            return verifier.verify(Base64.getDecoder().decode(signature));
-        } catch (Exception e) {
-            System.err.println("Vote verification failed: " + e.getMessage());
-            return false;
+            isValid = verifier.verify(Base64.getDecoder().decode(signature));
+        } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
+            throw new InvalidVoteException("Unable to verify vote", e);
         }
+
+        if (!isValid) {
+            throw new InvalidVoteException("Invalid Signature");
+        }
+
+
     }
 
-    public String serialise() throws Exception{
+    public String serialise() {
             return voter + "|||" + voteValue + "|||" + signature;
     }
 }

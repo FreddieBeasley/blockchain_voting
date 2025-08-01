@@ -2,7 +2,7 @@ package exceptions;
 
 public class MalformedJSONVoteException extends Exception{
     public MalformedJSONVoteException(String message, Throwable cause) {
-        super(message);
+        super(message, cause);
     }
 
     public MalformedJSONVoteException(String message) {

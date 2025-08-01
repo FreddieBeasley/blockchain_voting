@@ -12,14 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Logging
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 // Datatypes
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
 import java.util.*; // List, ArrayList, Set, Hashset
 
 
@@ -154,6 +147,10 @@ public class ParserUtils {
 
     // Blockchains
     public static Blockchain JSONToBlockchain(JSONObject data) throws MalformedJSONBlockchainException {
+        if (!(data instanceof JSONObject)) {
+            throw new MalformedJSONBlockchainException("data is malformed");
+        }
+
         // Difficulty
         if (!data.has("difficulty")){
             throw new MalformedJSONBlockchainException("Required field 'difficulty' missing");
