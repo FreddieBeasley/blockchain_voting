@@ -2,7 +2,7 @@ package exceptions;
 
 public class MalformedJSONBlockchainException extends Exception{
     public MalformedJSONBlockchainException(String message, Throwable cause) {
-        super(message);
+        super(message, cause);
     }
 
     public MalformedJSONBlockchainException(String message) {

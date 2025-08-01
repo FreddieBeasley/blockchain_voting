@@ -76,15 +76,15 @@ public class FileHandlingUtils {
 
     // JSON methods
     public static void writeToJSONFile(String filePath, Object data) throws IOException, IllegalArgumentException{
-            if (!(data instanceof JSONArray) || !(data instanceof JSONObject)){
-                throw new IllegalArgumentException("Date must be of type JSONArray or JSONObject");
+            if (!(data instanceof JSONArray || data instanceof JSONObject)){
+                throw new IllegalArgumentException("Data must be of type JSONArray or JSONObject");
             }
 
             try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));) {
                 if (data instanceof JSONArray) {
-                    writer.write(new JSONArray((JSONArray) data).toString());
+                    writer.write(new JSONArray((JSONArray) data).toString(4));
                 } else {
-                    writer.write(new JSONObject(data.toString()).toString());
+                    writer.write(new JSONObject(data.toString()).toString(4));
                 }
             }
     }
@@ -102,7 +102,7 @@ public class FileHandlingUtils {
             String fileContents = stringBuilder.toString().trim();
 
             if (fileContents.isEmpty()) {
-                throw new JSONException("Empty JSON file" + filePath);
+                return null;
             }
 
             char firstChar = fileContents.charAt(0);

@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import util.ParserUtils;
 
 // Included packages
-import java.security.PublicKey;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.File;
@@ -21,13 +21,13 @@ import java.io.File;
 public class knownPeers{
     // Fields
     private final List<RemoteNode> knownPeers = new ArrayList<>();
-    private final File persistentStorage = new File("data/knownPeers.json");
+    private final File persistentStorage = new File("src/main/data/knownPeers.json");
 
     // Local Variable
     int maxPeers = 8;
 
     // Initialisation
-    public knownPeers() {
+    public knownPeers() throws Exception {
         load();
     }
 
@@ -37,7 +37,7 @@ public class knownPeers{
     }
 
     // Persistent Methods
-    private void persist(){
+    private void persist() throws IOException {
         JSONArray jsonArray = new JSONArray();
         JSONObject tempObject = new JSONObject();
         for (RemoteNode node : knownPeers){
@@ -49,7 +49,7 @@ public class knownPeers{
         FileHandlingUtils.writeToJSONFile(persistentStorage.getPath(), jsonArray);
     }
 
-    private void load(){
+    private void load() throws Exception {
         try {
             JSONArray jsonArray = (JSONArray) FileHandlingUtils.readFromJSONFile(persistentStorage.getPath());
             assert jsonArray != null : "No content to load from";
@@ -75,12 +75,12 @@ public class knownPeers{
         return knownPeers.contains(node);
     }
 
-    public void addPeer(RemoteNode node){
+    public void addPeer(RemoteNode node) throws Exception{
         knownPeers.add(node);
         persist();
     }
 
-    public boolean removePeer(RemoteNode node){
+    public boolean removePeer(RemoteNode node) throws Exception{
         if (knownPeers.remove(node)) {
             persist();
             return true;

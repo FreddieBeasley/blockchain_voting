@@ -20,7 +20,7 @@ import java.util.Queue;
 public class PendingVotes {
     // Fields
     private final Queue<Vote> pendingVotes  = new LinkedList<>();
-    private final File persistentStorage = new File("data/pendingVotes.json");
+    private final File persistentStorage = new File("src/main/data/pendingVotes.json");
 
     // Initialisation
     public PendingVotes() {
@@ -57,7 +57,7 @@ public class PendingVotes {
 
              for (Object tempObject : jsonArray) {
                  JSONObject tempJSONObject = (JSONObject) tempObject;
-                 pendingVotes.add(new Vote( (PublicKey)  tempJSONObject.get("Voter"),  tempJSONObject.getInt("VoteValue"),  tempJSONObject.getString("Signature")));
+                 pendingVotes.add(new Vote(tempJSONObject.getString("Voter"),  tempJSONObject.getInt("VoteValue"),  tempJSONObject.getString("Signature")));
              }
 
         } catch (Exception e) {
