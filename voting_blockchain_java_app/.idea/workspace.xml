@@ -5,41 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3cff98b-7f9b-4801-8536-cbb70f415dd3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/blockchain/TempBlockchain.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/InvalidBlockException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/InvalidBlockchainException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/InvalidVoteException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/data/blockchain.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/blockchain.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/data/registeredVoters.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/registeredVoters.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Block.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/Block.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Blockchain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/Blockchain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/PendingVotes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/PendingVotes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Vote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/Vote.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONBlockException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONBlockException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONBlockchainException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONBlockchainException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONPeerException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONPeerException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONVoteException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONVoteException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/knownPeers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/network/knownPeers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/FileHandlingUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/FileHandlingUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/ParserUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ParserUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Block.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/blockchain/Block.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Blockchain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/blockchain/Blockchain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/blockchain/PendingVotes.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/blockchain/PendingVotes.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Vote.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/blockchain/Vote.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/Client.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/Client.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/MessageIn.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/MessageIn.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/MessageOut.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/MessageOut.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/Server.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/knownPeers.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/knownPeers.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/nodes/LocalNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/nodes/LocalNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/nodes/Node.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/nodes/Node.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/nodes/RemoteNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/nodes/RemoteNode.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/util/CryptographyUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/CryptographyUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/util/FileHandlingUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/FileHandlingUtils.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/util/ParserUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ParserUtils.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -178,7 +152,7 @@
       <workItem from="1753879202293" duration="975000" />
       <workItem from="1753881092902" duration="22517000" />
       <workItem from="1753989424725" duration="1865000" />
-      <workItem from="1753991695459" duration="17561000" />
+      <workItem from="1753991695459" duration="22113000" />
     </task>
     <servers />
   </component>

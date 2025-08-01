@@ -99,8 +99,6 @@ public class Blockchain {
     private void load() throws IOException {
         JSONObject persistentJSON = (JSONObject) FileHandlingUtils.readFromJSONFile(persistentStorage.getPath());
 
-        //System.out.println(persistentJSON.toString(4));
-
         Blockchain tempBlockchain;
 
         try {
@@ -111,11 +109,6 @@ public class Blockchain {
             throw new IOException("No blockchain stored to load from");
         }
 
-        System.out.println(ParserUtils.BlockchainToJSON(tempBlockchain));
-        Block suspiciousBlock = tempBlockchain.getBlock(0);
-        System.out.println(suspiciousBlock.getPreviousHash() + " " + suspiciousBlock.getVotes() + " " + suspiciousBlock.getNonce() + " " + suspiciousBlock.getHash() + " " + suspiciousBlock.getTimestamp());
-        System.out.println(suspiciousBlock.getHash().getClass().getSimpleName() + " " + suspiciousBlock.getVotes().getClass().getSimpleName() + " " + suspiciousBlock.getNonce());
-        System.out.println(suspiciousBlock.computeHash());
         try {
             tempBlockchain.isValid();
         } catch (InvalidBlockchainException e) {
