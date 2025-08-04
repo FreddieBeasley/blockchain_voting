@@ -28,7 +28,7 @@ public class Main{
 
         PublicKey publicKey = keypair.getPublic();
 
-        FileHandlingUtils.appendToJSONFileArray("src/main/data/registeredVoters.json", CryptographyUtils.publicKeyToString(publicKey));
+        FileHandlingUtils.appendToJSONFileArray("src/main/data/registered_voters.json", CryptographyUtils.publicKeyToString(publicKey));
 
         return keypair;
     }

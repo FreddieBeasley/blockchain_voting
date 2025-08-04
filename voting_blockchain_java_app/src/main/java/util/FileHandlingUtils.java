@@ -80,7 +80,7 @@ public class FileHandlingUtils {
                 throw new IllegalArgumentException("Data must be of type JSONArray or JSONObject");
             }
 
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));) {
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
                 if (data instanceof JSONArray) {
                     writer.write(new JSONArray((JSONArray) data).toString(4));
                 } else {
