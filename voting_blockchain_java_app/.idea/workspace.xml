@@ -5,15 +5,58 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3cff98b-7f9b-4801-8536-cbb70f415dd3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/data/blockchain_data/metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/data/blockchain_data/pending_votes.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/data/blockchain_data/remaining_voters.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/data/known_peers.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Main2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/InvalidPublicKeyException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/LoadException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/PersistenceException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/network/LocalPeer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/network/NetworkManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/network/Persistence.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/network/RemotePeer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/util/ExceptionUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/data/blockchain.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/blockchain.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/data/registeredVoters.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/registeredVoters.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/data/knownPeers.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/blockchain_data/chain.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/data/pendingVotes.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/data/registeredVoters.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/registered_voters.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Blockchain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/Blockchain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/TempBlockchain.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/CryptographyUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/CryptographyUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/PendingVotes.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONBlockException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONBlockchainException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONPeerException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONVoteException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/Client.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/MessageIn.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/MessageOut.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/knownPeers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/network/KnownPeers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/network.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/nodes/LocalNode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/nodes/Node.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/nodes/RemoteNode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/FileHandlingUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/FileHandlingUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/ParserUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ParserUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Blockchain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/blockchain/Blockchain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/blockchain/PendingVotes.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/MalformedJSONBlockException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/MalformedJSONBlockchainException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/MalformedJSONPeerException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/MalformedJSONVoteException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/MessageIn.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/MessageOut.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/Server.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/knownPeers.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/knownPeers.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/nodes/LocalNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/nodes/Node.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/nodes/RemoteNode.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/util/ParserUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ParserUtils.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,28 +85,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/freddiebeasley/Desktop/Work/ComputerScience/programming_projects/projects_active/blockchain/voting/voting_blockchain_java_app&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.Main2.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/freddiebeasley/Desktop/Work/ComputerScience/programming_projects/projects_active/blockchain/voting/voting_blockchain_java_app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/network" />
       <recent name="$PROJECT_DIR$/src/main" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -151,7 +197,10 @@
       <workItem from="1753879202293" duration="975000" />
       <workItem from="1753881092902" duration="22517000" />
       <workItem from="1753989424725" duration="1865000" />
-      <workItem from="1753991695459" duration="27302000" />
+      <workItem from="1753991695459" duration="30422000" />
+      <workItem from="1754119254866" duration="34239000" />
+      <workItem from="1754227818205" duration="2825000" />
+      <workItem from="1754232211134" duration="23737000" />
     </task>
     <servers />
   </component>
@@ -169,7 +218,15 @@
           <properties class="exceptions.InvalidBlockchainException" package="exceptions" />
           <option name="timeStamp" value="10" />
         </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="exceptions.MalformedJSONBlockchainException" package="exceptions" />
+          <option name="timeStamp" value="49" />
+        </breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
