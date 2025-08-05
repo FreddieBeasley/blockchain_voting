@@ -1,4 +1,4 @@
-# 🗃️ Documentation – Data Directory (Voting Blockchain Java App)
+# 🗃️ Documentation – Data Directory (Voting resources.Blockchain Java App)
 
 This document describes the purpose, format, and handling of all persistent data files used by the voting blockchain application. The `data/` directory serves as the storage layer for the blockchain, vote queue, voter registry, and known peer list.
 

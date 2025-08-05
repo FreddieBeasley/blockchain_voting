@@ -5,58 +5,63 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3cff98b-7f9b-4801-8536-cbb70f415dd3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/data/blockchain_data/metadata.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/data/blockchain_data/pending_votes.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/data/blockchain_data/remaining_voters.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/data/known_peers.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Main2.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/InvalidPublicKeyException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/LoadException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/exceptions/PersistenceException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/network/LocalPeer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/network/NetworkManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/network/Persistence.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/network/RemotePeer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/util/ExceptionUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/documentation/DirectoryInfo.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/resources/blockchain/Chain.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/resources/blockchain/PendingVotes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/resources/blockchain/RemainingVoters.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/resources/network/MessageReciever.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/resources/network/MessageSender.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/resources/util/JSONParsers/NetworkParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/data/blockchain.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/blockchain.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/data/knownPeers.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/blockchain_data/chain.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/data/pendingVotes.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/data/registeredVoters.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/registered_voters.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Blockchain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/blockchain/Blockchain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/PendingVotes.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONBlockException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONBlockchainException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONPeerException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONVoteException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/Client.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/MessageIn.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/MessageOut.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/Server.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/knownPeers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/network/KnownPeers.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/network.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/nodes/LocalNode.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/nodes/Node.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/network/nodes/RemoteNode.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/FileHandlingUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/FileHandlingUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/ParserUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ParserUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Blockchain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/blockchain/Blockchain.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/blockchain/PendingVotes.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/MalformedJSONBlockException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/MalformedJSONBlockchainException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/MalformedJSONPeerException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/MalformedJSONVoteException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/MessageIn.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/MessageOut.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/Server.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/Server.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/knownPeers.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/network/knownPeers.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/nodes/LocalNode.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/nodes/Node.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/network/nodes/RemoteNode.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/util/ParserUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ParserUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/blockchain-app/blockchain/DOCUMENTATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/blockchain-app/blockchain/DOCUMENTATION.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/blockchain-app/network/DOCUMENTATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/blockchain-app/network/DOCUMENTATION.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/data/DOCUMENTATION.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/DOCUMENTATION.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/data/known_peers.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/network_manager.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Testing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Block.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/blockchain/resources/Block.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Blockchain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/Blockchain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/DOCUMENTATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/blockchain/Vote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/blockchain/resources/Vote.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/InvalidBlockException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/exceptions/InvalidBlockException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/InvalidBlockchainException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/exceptions/InvalidBlockchainException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/InvalidPublicKeyException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/exceptions/InvalidPublicKeyException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/InvalidVoteException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/exceptions/InvalidVoteException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/LoadException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/exceptions/LoadException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/MalformedJSONException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/exceptions/MalformedJSONException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/exceptions/PersistenceException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/exceptions/PersistenceException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/DOCUMENTATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/KnownPeers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/network/KnownPeers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/LocalPeer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/LocalPeer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/NetworkManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/NetworkManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/Persistence.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/Persistence.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/network/RemotePeer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/network/resources/RemotePeer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/CryptographyUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/util/Cryptography.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/ExceptionUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/util/Exceptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/FileHandlingUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/util/FileHandlers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/ParserUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/util/JSONParsers/BlockchainParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Main2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Block.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Blockchain.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/blockchain/Vote.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/InvalidBlockException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/InvalidBlockchainException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/InvalidPublicKeyException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/InvalidVoteException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/LoadException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/MalformedJSONException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/exceptions/PersistenceException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/Client.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/LocalPeer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/Persistence.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/RemotePeer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/Server.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/network/knownPeers.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/util/CryptographyUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/util/ExceptionUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/util/FileHandlingUtils.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/util/ParserUtils.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,6 +94,7 @@
   "keyToString": {
     "Application.Main.executor": "Run",
     "Application.Main2.executor": "Run",
+    "Application.Testing.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -111,6 +117,9 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/main/java/network" />
       <recent name="$PROJECT_DIR$/src/main" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="exceptions" />
@@ -200,7 +209,8 @@
       <workItem from="1753991695459" duration="30422000" />
       <workItem from="1754119254866" duration="34239000" />
       <workItem from="1754227818205" duration="2825000" />
-      <workItem from="1754232211134" duration="23737000" />
+      <workItem from="1754232211134" duration="32354000" />
+      <workItem from="1754320267868" duration="5370000" />
     </task>
     <servers />
   </component>
@@ -222,6 +232,15 @@
           <properties class="exceptions.MalformedJSONBlockchainException" package="exceptions" />
           <option name="timeStamp" value="49" />
         </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="resources.exceptions.LoadException" package="resources.exceptions" />
+          <option name="timeStamp" value="70" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/resources/Persistence.java</url>
+          <line>114</line>
+          <option name="timeStamp" value="86" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
