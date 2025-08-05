@@ -1,0 +1,274 @@
+package app.resources;
+
+import app.LocalPeer;
+
+import app.resources.exceptions.InvalidBlockchainException;
+import app.resources.exceptions.LoadException;
+import app.resources.exceptions.MalformedJSONException;
+import app.resources.exceptions.PersistenceException;
+import app.resources.util.Exceptions;
+import app.resources.network.KnownPeers;
+import app.resources.util.FileHandlers;
+
+import app.resources.util.JSONParsers.BlockchainParser;
+import app.resources.util.JSONParsers.NetworkParser;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashSet;
+import java.util.Set;
+
+public class Persistence {
+
+    // TEMP - Needed for NetworkManager
+    private final String host;
+    private final int port;
+    private final LocalPeer localPeer;
+
+    // Fields
+    private final File persistentBlockchain; // resources.Blockchain
+
+    private final File persistentNetworkManager; // resources.Blockchain
+
+    private final File registeredVoters; // resources.Blockchain
+
+    private final Logger logger; // logging
+
+    // Initialisation
+    public Persistence(String host, int port, LocalPeer localPeer) { // default initialisation
+        this.host = host;
+        this.port = port;
+        this.localPeer = localPeer;
+
+        this.persistentBlockchain = new File("src/main/data/blockchain.json");
+
+        this.persistentNetworkManager = new File("src/main/data/network_manager.json");
+
+        this.registeredVoters = new File("src/main/data/registered_voters.json");
+
+        this.logger = LoggerFactory.getLogger(Persistence.class);
+    }
+
+    public Persistence(String persistentBlockchain, String persistentNetworkManager, String registeredVoters, String host, int port, LocalPeer localPeer) { // custom initialisation
+        this.host = host;
+        this.port = port;
+        this.localPeer = localPeer;
+
+        this.persistentBlockchain = new File(persistentBlockchain);
+
+        this.persistentNetworkManager = new File(persistentNetworkManager);
+
+        this.registeredVoters = new File(registeredVoters);
+
+        this.logger = LoggerFactory.getLogger(Persistence.class);
+    }
+
+    // Blockchain Load
+    private Blockchain attemptBlockchainLoad() throws LoadException {
+        JSONObject blockchainJson = null;
+        try {
+            blockchainJson = (JSONObject) FileHandlers.readFromJSONFile(persistentBlockchain.getPath());
+        } catch (IOException e) {
+            throw new LoadException("data/blockchain is missing or empty", e);
+        } catch (JSONException e) {
+            throw new LoadException("data/blockchain is malformed", e);
+        }
+
+        if (blockchainJson == null) {
+            throw new LoadException("data/blockchain is missing or empty");
+        }
+
+        Blockchain newBlockchain;
+
+        try {
+            newBlockchain = BlockchainParser.JSONToBlockchain(blockchainJson); // Throws MalformedJSONException
+        } catch (MalformedJSONException e) {
+            throw new LoadException("data/blockchain is malformed", e);
+        }
+
+        try {
+            newBlockchain.isValid(); // Throws InvalidBlockchainException
+        } catch (InvalidBlockchainException e) {
+            throw new LoadException("Loaded blockchain is invalid", e);
+        }
+
+        return newBlockchain;
+
+    }
+
+    private Set<String> attemptRegisteredVotersLoad() throws LoadException {
+        JSONArray RegisteredVotersJson;
+
+        try {
+            RegisteredVotersJson = (JSONArray) FileHandlers.readFromJSONFile(registeredVoters.getPath());
+        } catch (JSONException e) {
+            throw new LoadException("data.registered_voters.json is malformed", e);
+        } catch (IOException e) {
+            throw new LoadException("data.registered_voters.json is missing", e);
+        }
+
+        if (RegisteredVotersJson == null) {
+            throw new LoadException("data.registered_voters.json is missing");
+        }
+
+        return new HashSet<>(BlockchainParser.JSONToRemainingVoters(RegisteredVotersJson));
+    }
+
+    public Blockchain attemptBlockchainCreationWithRegisteredVoters() throws LoadException {
+        return new Blockchain(attemptRegisteredVotersLoad()); // throws LoadException
+    }
+
+    private Blockchain createNewBlockchain() {
+        return new Blockchain();
+    }
+
+    public Blockchain loadBlockchain() {
+        try {
+            Blockchain newBLockchain = attemptBlockchainLoad();
+            logger.info("Successfully loaded blockchain");
+            return newBLockchain;
+        } catch (LoadException e) {
+            logger.warn("Error loading blockchain", e);
+        }
+
+        try {
+            Blockchain newBLockchain = attemptBlockchainCreationWithRegisteredVoters();
+            logger.info("Successfully loaded blockchain from registered voters");
+            return newBLockchain;
+        } catch (LoadException e) {
+            logger.warn("Error creating blockchain from registered voters", e);
+        }
+
+        logger.info("Empty blockchain created");
+        return createNewBlockchain();
+    }
+
+    // NetworkManager Load
+    private NetworkManager attemptNetworkManagerLoad() throws LoadException {
+        JSONObject networkManagerJSON;
+
+        try {
+             networkManagerJSON = (JSONObject) FileHandlers.readFromJSONFile(persistentNetworkManager.getPath()); // Throws IOException
+        } catch (IOException e) {
+            throw new LoadException("data/network_manager.json is missing or empty", e);
+        }
+
+        if (networkManagerJSON == null) {
+            throw new LoadException("data/network_manager.json is missing or empty");
+        }
+
+        NetworkManager networkManager;
+
+        try {
+            networkManager = NetworkParser.JSONToNetworkManager(networkManagerJSON, host, port,localPeer);
+        } catch (MalformedJSONException | NoSuchAlgorithmException e) {
+            throw new LoadException("data/network_manager.json is malformed", e);
+        }
+
+        return networkManager;
+    }
+
+    private KnownPeers attemptKnownPeersLoad() throws LoadException {
+        JSONObject networkManagerJSON;
+
+        try {
+            networkManagerJSON = (JSONObject) FileHandlers.readFromJSONFile(persistentNetworkManager.getPath()); // Throws IOException
+        } catch (IOException e) {
+            throw new LoadException("knownPeers is missing", e);
+        }
+
+        if (networkManagerJSON == null) {
+            throw new LoadException("knownPeers is missing");
+        }
+
+        JSONObject knownPeersJSON;
+
+        try {
+            knownPeersJSON = networkManagerJSON.getJSONObject("known_peers");
+        }  catch (JSONException e) {
+            throw new LoadException("knownPeers is missing", e);
+        }
+
+        if (knownPeersJSON == null) {
+            throw new LoadException("knownPeers is missing");
+        }
+
+        KnownPeers knownPeers;
+
+        try {
+            knownPeers = NetworkParser.JSONToKnownPeers(knownPeersJSON);
+        } catch (MalformedJSONException e) {
+            throw new LoadException("knownPeers is malformed", e);
+        }
+
+        return knownPeers;
+    }
+
+    private NetworkManager attemptNetworkManagerCreationWithOnlyKnownPeers() throws LoadException {
+        try {
+            return new NetworkManager(host, port, localPeer, attemptKnownPeersLoad());
+        } catch (NoSuchAlgorithmException e) {
+            throw new LoadException("network_manager.json is malformed", e);
+        }
+    }
+
+    private NetworkManager createNewNetworkManager() throws NoSuchAlgorithmException {
+        return new NetworkManager(host, port,localPeer, new KnownPeers());
+    }
+
+    public NetworkManager loadNetworkManager() {
+        try {
+            NetworkManager newNetworkManager = attemptNetworkManagerLoad();
+            logger.info("Successfully loaded networkManager");
+            return newNetworkManager;
+        } catch (LoadException e) {
+            logger.warn("Error loading network manager" + Exceptions.buildExceptionChain(e) );
+        }
+
+        try {
+            NetworkManager newNetworkManager = attemptNetworkManagerCreationWithOnlyKnownPeers();
+            logger.info("Successfully loaded networkManager without cryptographic keys");
+            return newNetworkManager;
+        } catch (LoadException e) {
+            logger.warn("Error creating network manager with known nodes" + Exceptions.buildExceptionChain(e) );
+        }
+
+        try {
+            NetworkManager newNetworkManager = createNewNetworkManager();
+            logger.info("New network manager created");
+            return newNetworkManager;
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("Error creating new network manager", e);
+            throw new RuntimeException();
+        }
+    }
+
+    // Persistence
+    public void persistBlockchain(Blockchain blockchain) throws PersistenceException {
+        JSONObject persistentBlockchainJSON = BlockchainParser.BlockchainToJSON(blockchain);
+
+        try {
+            FileHandlers.writeToJSONFile(persistentBlockchain.getPath(), persistentBlockchainJSON);
+        } catch (IOException e) {
+            throw new PersistenceException(e.getMessage());
+        }
+    }
+
+    public void persistNetworkManager(NetworkManager networkManager) throws PersistenceException {
+        JSONObject persistentNetworkManagerJSON = NetworkParser.networkManagerToJSON(networkManager);
+
+        try {
+            FileHandlers.writeToJSONFile(persistentNetworkManager.getPath(), persistentNetworkManagerJSON);
+        } catch (IOException e) {
+            throw new PersistenceException(e.getMessage());
+        }
+   }
+
+}
+
