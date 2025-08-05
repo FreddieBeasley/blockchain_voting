@@ -1,4 +1,4 @@
-# 📘 Documentation – Blockchain Module (Voting Blockchain Java App)
+# 📘 Documentation – resources.Blockchain Module (Voting resources.Blockchain Java App)
 
 This document provides **in-depth technical documentation** for the `blockchain/` module, which implements the core functionality of a cryptographically secure, vote-based blockchain system in Java.
 
@@ -32,7 +32,7 @@ This module assumes responsibility for vote validation, block mining, blockchain
    - `mineBlock(int difficulty)` – performs proof-of-work.
    - `isValid(int difficulty)` – checks block hash, proof-of-work, and vote validity.
 
-### `Blockchain.java`
+### `resources.Blockchain.java`
 - **Purpose**: Manages the sequence of blocks, pending votes, and voter eligibility.
 - **Fields**:
    - `List<Block> chain` – the main blockchain.
@@ -47,12 +47,12 @@ This module assumes responsibility for vote validation, block mining, blockchain
 ### `PendingVotes.java`
 - **Purpose**: Temporary storage for votes awaiting inclusion in a block.
 - **Implements**: Queue semantics using `LinkedList`.
-- **Persistence**: Appends serialized vote strings to `pendingVotes.txt`.
+- **resources.Persistence**: Appends serialized vote strings to `pendingVotes.txt`.
 
 ### `RemainingVoters.java`
 - **Purpose**: Prevents double voting by tracking voters who haven't voted.
 - **Structure**: Uses a `HashSet<PublicKey>` to store voter keys.
-- **Persistence**: Updates remainingVoters.txt once a voter has voted
+- **resources.Persistence**: Updates remainingVoters.txt once a voter has voted
 - **Key Method**: `removeVoter(PublicKey)` returns `true` if the voter was valid and removed.
 
 ---
@@ -67,7 +67,7 @@ This module assumes responsibility for vote validation, block mining, blockchain
    - The serialized vote is stored in `pendingVotes.txt`.
 
 3. **Block Created**:
-   - `Blockchain.createNewBlock()` collects votes, validates them, and mines a block.
+   - `resources.Blockchain.createNewBlock()` collects votes, validates them, and mines a block.
    - Valid votes are removed from `RemainingVoters`.
 
 4. **Block Verified & Added**:
@@ -123,7 +123,7 @@ This module assumes responsibility for vote validation, block mining, blockchain
 ## 🧪 Currently Working On
 
 - ✅ Load `RemainingVoters`, `PendingVotes`, and `blockchain` from disk on startup
-- ✅ Store `Blockchain` to disk in a JSON or binary format
+- ✅ Store `resources.Blockchain` to disk in a JSON or binary format
 - 🧠 Implement Merkle tree support for block content
 - 🌐 Sync chain across networked peers
 - 🔒 Add encrypted storage for votes and chain data

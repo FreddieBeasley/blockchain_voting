@@ -1,4 +1,4 @@
-# 📘 Documentation – Network Module (Voting Blockchain Java App)
+# 📘 Documentation – Network Module (Voting resources.Blockchain Java App)
 
 This document provided **in-depth technical documentation** for the `network/` module, which implements the core functionality of a peer on a network communicating with other peer regarding blockchain updates in java.
 
