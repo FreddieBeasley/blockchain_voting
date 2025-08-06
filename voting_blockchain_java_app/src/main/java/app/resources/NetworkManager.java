@@ -7,10 +7,7 @@ import app.LocalPeer;
 import app.resources.network.KnownPeers;
 import app.resources.util.Cryptography;
 
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
-import java.security.PrivateKey;
+import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 
 public class NetworkManager {
@@ -26,7 +23,7 @@ public class NetworkManager {
 
     private final KnownPeers knownPeers;
 
-    public NetworkManager(String host, int port, LocalPeer localPeer, KnownPeers knownPeers) throws NoSuchAlgorithmException{
+    public NetworkManager(String host, int port, LocalPeer localPeer, KnownPeers knownPeers) throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         this.logger = LoggerFactory.getLogger(NetworkManager.class);
 
         this.localPeer = localPeer;

@@ -11,6 +11,7 @@ import app.resources.exceptions.MalformedJSONException;
 import app.resources.network.KnownPeers;
 import app.resources.network.resources.RemotePeer;
 
+import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +131,7 @@ public class NetworkParser {
     // Public Keys & Private Keys do not need to be converted
 
     // Does not load or store port and host - this gets passed in from the localNode object
-    public static NetworkManager  JSONToNetworkManager(JSONObject data, String host, int port, LocalPeer localPeer) throws MalformedJSONException, NoSuchAlgorithmException {
+    public static NetworkManager  JSONToNetworkManager(JSONObject data, String host, int port, LocalPeer localPeer) throws MalformedJSONException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         if (!data.has("public_key")){
             throw new MalformedJSONException("Required field 'publicKey' missing");
         }

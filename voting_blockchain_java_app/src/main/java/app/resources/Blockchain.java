@@ -15,7 +15,7 @@ import java.util.*; // List, ArrayList, Set, HashSet, Queue
 public class Blockchain {
 
     // Fields
-    private int difficulty;
+    private final int difficulty;
     private final List<Block> chain;
     private final Queue<Vote> pendingVotes;
     private final Set<String> remainingVoters;
@@ -24,19 +24,21 @@ public class Blockchain {
 
     // Load new blockchain ( without possible voters )
     public Blockchain() {
+        this.difficulty = 4;
         this.chain = new ArrayList<>();
+        this.chain.add(createGenesisBlock());
         this.remainingVoters = new HashSet<>();
         this.pendingVotes = new LinkedList<>();
-        this.difficulty = 4;
 
     }
 
     // Load new blockchain ( with possible voters )
     public Blockchain(Set<String> remainingVoters){
+        this.difficulty = 4;
         this.chain = new ArrayList<>();
+        this.chain.add(createGenesisBlock());
         this.remainingVoters = remainingVoters;
         this.pendingVotes = new LinkedList<>();
-        this.difficulty = 4;
     }
 
     // Load existing blockchain
@@ -73,10 +75,17 @@ public class Blockchain {
         return chain.get(index);
     }
 
-    public boolean createNewBlock() {
+    public Block createGenesisBlock(){
+        List<Vote>  noVotes = new ArrayList<>();
+        return new Block("0".repeat(difficulty), noVotes);
+    }
+
+    public void createNewBlock() {
+        logger.info("Attempting to create new block");
+
         if (pendingVotes.isEmpty()) {
-            System.out.println("No pending votes");
-            return false;
+            logger.info("No pending votes");
+            return;
         }
 
         // Segregate Valid & Invalid votes
@@ -94,6 +103,7 @@ public class Blockchain {
             } catch(InvalidVoteException e){
                 logger.warn("Invalid vote from {}", voter, e);
                 discardedVotes.add(vote.serialise());
+                continue;
             }
 
             if (removeVoter(voter)) {
@@ -105,8 +115,9 @@ public class Blockchain {
         }
 
         if (votesForBlock.isEmpty()) {
-            logger.info("No votes to add to blockchain");
-            return false;
+            logger.info("No pending votes");
+            logDiscardedVotes(discardedVotes);
+            return;
         }
 
         // Create
@@ -114,21 +125,46 @@ public class Blockchain {
         Block newBlock = new Block(lastBlock.getHash(), votesForBlock);
 
         // Mine
-        newBlock.mineBlock(difficulty);
+        try {
+            newBlock.mineBlock(difficulty);
+        }  catch (InvalidBlockException e) {
+            logger.warn(e.getMessage());
+            return;
+        }
+
+        logger.info("Block successfully mined");
 
         // Add
         chain.add(newBlock);
 
-        // Log
-        if (discardedVotes.isEmpty()) {
-            logger.info("Block successfully created");
-        } else {
-            logger.info("Block successfully created, votes discarded from: {}", discardedVotes);
-        }
-
-        return true;
-
+        // Logging
+        logAcceptedVotes(votesForBlock);
+        logDiscardedVotes(discardedVotes);
     }
+
+    // CreateNewBlock() helper methods
+    private void logDiscardedVotes(List<String> discardedVotes) {
+        if (!discardedVotes.isEmpty()) {
+            StringBuilder displayString = new StringBuilder("Block discarded votes from:\n");
+            for (String voter : discardedVotes) {
+                displayString.append("\t")
+                        .append(voter)
+                        .append("\n");
+            }
+            logger.warn(displayString.toString());
+        }
+    }
+
+    private void logAcceptedVotes(List<Vote> votesForBlock) {
+        StringBuilder displayString = new StringBuilder("Block added to blockchain with votes from:\n");
+        for (Vote vote: votesForBlock) {
+            displayString.append("\t")
+                    .append(vote.getVoter())
+                    .append("\n");
+        }
+        logger.info(displayString.toString());
+    }
+
 
     public void isValid() throws InvalidBlockchainException {
         // Verify Hash Chain
@@ -150,14 +186,6 @@ public class Blockchain {
                 throw new InvalidBlockchainException("Invalid block at index " + i + " with hash: "   + block.getHash(), e);
             }
         }
-
-        for (Block block : chain) {
-            try {
-                block.isValid(difficulty);
-            } catch (InvalidBlockException e) {
-                throw new InvalidBlockchainException("Invalid block with hash " + block.getHash(), e);
-            }
-        }
     }
 
     // Pending Votes
@@ -175,10 +203,7 @@ public class Blockchain {
     }
 
     private boolean removeVoter(String voter) {
-        if (remainingVoters.remove(voter)) {
-            return true;
-        }
-        return false;
+        return remainingVoters.remove(voter);
     }
 
     /*

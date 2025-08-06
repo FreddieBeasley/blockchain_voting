@@ -33,7 +33,7 @@ public class LocalPeer {
     // Initialisation
     public LocalPeer(int peerPort, int webPort) {
         // Network Information
-        this.host = "localhost";
+        this.host = "127.0.0.1";
         this.peerPort = peerPort;
         this.webPort = webPort;
 
@@ -78,7 +78,9 @@ public class LocalPeer {
     // Methods
     public void handleNewVote(Vote vote){
         blockchain.addNewVote(vote);
-        logger.info("New vote added to pending votes: " + vote.toString());
+        logger.info("New vote added to pending votes: " + vote.serialise());
+        blockchain.createNewBlock();
+        persistState();
     }
 
     // resources.Blockchain
@@ -88,6 +90,14 @@ public class LocalPeer {
 
         peerThread.start();
         webThread.start();
+
+        try {
+            peerThread.join();
+            webThread.join();
+        } catch (InterruptedException e) {
+            logger.error("Startup interrupted", e);
+            Thread.currentThread().interrupt();
+        }
 
     }
 

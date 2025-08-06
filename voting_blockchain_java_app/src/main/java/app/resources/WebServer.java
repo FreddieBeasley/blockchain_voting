@@ -16,6 +16,7 @@ import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
 import java.nio.file.Files;
+import java.util.concurrent.Executors;
 
 public class WebServer {
     // Fields
@@ -54,6 +55,28 @@ public class WebServer {
             logger.error("Error starting http server", e);
             throw new RuntimeException(e);
         }
+
+        // L:KJ:LKLKFALKDLDFJLKFLK:J
+        /*
+        server.createContext("/", exchange -> {
+            String method = exchange.getRequestMethod();
+            String path = exchange.getRequestURI().getPath();
+            logger.error("Incoming request: " + method + " " + path);
+
+           if(path.equals("/") || path.equals("/vote")) {
+               new rootHandler().handle(exchange);
+           } else {
+               String response = "Unhandled path" + path;
+               exchange.sendResponseHeaders(404, response.length());
+               try (OutputStream os = exchange.getResponseBody()) {
+                   os.write(response.getBytes());
+               }
+           }
+        });
+         */
+
+        // L:JL:KJSD:LKJLFKJDSLKJFLKJDK
+
         server.createContext("/", new rootHandler());
         server.createContext("/vote", new VoteHandler()); // Create a new route at "/vote", POST requests to "/vote" will be handled by "VoteHandler()"
         server.setExecutor(null); // Uses default single threaded executor
@@ -67,8 +90,8 @@ public class WebServer {
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
-            if(!exchange.getRequestMethod().equals("POST")){
-                exchange.sendResponseHeaders(400,0);
+            if (!exchange.getRequestMethod().equals("POST")) {
+                exchange.sendResponseHeaders(400, 0);
                 return;
             }
 
@@ -82,30 +105,32 @@ public class WebServer {
             in.close();
 
             try {
+                logger.info("New vote received: " + body);
 
                 // Convert String to JSON to Vote
                 Vote vote = BlockchainParser.JSONToVote(new JSONObject(body));
 
                 // Send vote to LocalPeer
-                logger.info("New vote accepted: " + body);
+                logger.info("New vote send for handling: " + vote.serialise());
                 localPeer.handleNewVote(vote);
 
                 // Send back success response
                 String response = "Vote accepted.";
                 exchange.sendResponseHeaders(200, response.length());
 
-                OutputStream out = exchange.getResponseBody();
-                out.write(response.getBytes());
-                out.close();
+                try (OutputStream out = exchange.getResponseBody()) {
+                    out.write(response.getBytes());
+                }
+
             } catch (Exception e) {
                 // Send back reject response
                 logger.info("New vote rejected: " + body);
 
                 String response = "Vote rejected: " + e.getMessage();
                 exchange.sendResponseHeaders(400, response.length());
-                OutputStream out = exchange.getResponseBody();
-                out.write(response.getBytes());
-                out.close();
+                try (OutputStream out = exchange.getResponseBody()) {
+                    out.write(response.getBytes());
+                }
             }
 
 
@@ -115,17 +140,35 @@ public class WebServer {
     public class rootHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
+            logger.info("Root request received");
             if(!exchange.getRequestMethod().equals("GET")){
+                logger.warn("Invalid method: "  + exchange.getRequestMethod());
                 exchange.sendResponseHeaders(400,0);
+                try (OutputStream out = exchange.getResponseBody()) {
+                    out.write("Bad request".getBytes());
+                }
                 return;
             }
 
-            byte[] response = Files.readAllBytes(Path.of("vote.html"));
-            exchange.getResponseHeaders().add("Content-Type", "text/html");
-            exchange.sendResponseHeaders(200, response.length);
-            OutputStream out = exchange.getResponseBody();
-            out.write(response);
-            out.close();
+            try {
+                byte[] response = Files.readAllBytes(Path.of("src/main/frontend/vote.html"));
+                exchange.sendResponseHeaders(200, response.length);
+
+                // try with resources automatically closes output stream
+                try(OutputStream out = exchange.getResponseBody()){
+                    out.write(response);
+                }
+
+                logger.info("Successfully served vote.html");
+            } catch (IOException e) {
+                logger.error("Failed serving vote.html", e);
+                String msg = "My 404 Not Found";
+                exchange.sendResponseHeaders(404, msg.length());
+
+                try(OutputStream out = exchange.getResponseBody()) {
+                    out.write(msg.getBytes());
+                }
+            }
         }
     }
 
