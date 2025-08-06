@@ -72,7 +72,7 @@ public class Block {
 
     }
 
-    public void mineBlock(int difficulty) {
+    public void mineBlock(int difficulty) throws InvalidBlockException {
         String prefix = "0".repeat(difficulty);
 
         while (!hash.startsWith(prefix)) {
@@ -80,12 +80,11 @@ public class Block {
             hash = computeHash();
 
             if (hash == null) {
-                System.err.println("Hash computation failed. Mining aborted.");
+                throw new InvalidBlockException("Hash computation failed");
             }
 
         }
 
-        System.out.println("Block successfully mined.");
     }
 
     public void isValid(int difficulty) throws InvalidBlockException {

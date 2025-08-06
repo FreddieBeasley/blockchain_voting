@@ -63,10 +63,10 @@ public class Vote {
     }
 
     public void isValid() throws InvalidVoteException {
-        Boolean isValid;
+        boolean isValid;
 
         try {
-            String data = voter + voteValue;
+            String data = voter + "|||"  + voteValue;
             Signature verifier = Signature.getInstance("SHA256withRSA"); // Signature object for SHA-256
             verifier.initVerify(getVoterAsPublicKey()); // Initialises the object for verification ( with expected signers public_key )
             verifier.update(data.getBytes()); // Updates data to be verified ( with expected vote data )

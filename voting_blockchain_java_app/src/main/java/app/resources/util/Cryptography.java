@@ -1,5 +1,6 @@
 package app.resources.util;
 
+import java.security.spec.ECGenParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 import java.security.*; // KeyPairGenerator, KeyPair, PublicKey, PrivateKey, Signature, NoSuchAlgorithmException, KeyFactory
@@ -8,22 +9,25 @@ import java.security.spec.PKCS8EncodedKeySpec;
 
 
 public class Cryptography {
+    private static final String signatureAlgorithm = "SHA256withRSA";
+    private static final String keyAlgorithm = "RSA";
+    private static final int keySize = 2048;
 
-    public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA"); // getInstance throws NoSuchAlgorithmException
-        keyPairGenerator.initialize(2048);
+    public static KeyPair generateKeyPair() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(keyAlgorithm); // getInstance throws NoSuchAlgorithmException
+        keyPairGenerator.initialize(keySize);
         return keyPairGenerator.generateKeyPair();
     }
 
     public static String sign(String data, PrivateKey privateKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        Signature signer = Signature.getInstance("SHA256withRSA"); // getInstance throws NoSuchAlgorithmException
+        Signature signer = Signature.getInstance(signatureAlgorithm); // getInstance throws NoSuchAlgorithmException
         signer.initSign(privateKey); // initSign throws InvalidKeyException
         signer.update(data.getBytes()); // update throws SignatureException
         return Base64.getEncoder().encodeToString(signer.sign()); // sign throws SignatureException
     }
 
     public static boolean verify(String data, String signature, PublicKey publicKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        Signature verifier = Signature.getInstance("SHA256withRSA"); // getInstance throws NoSuchAlgorithmException
+        Signature verifier = Signature.getInstance(signatureAlgorithm); // getInstance throws NoSuchAlgorithmException
         verifier.initVerify(publicKey); // initVerify throws InvalidKeyException
         verifier.update(data.getBytes()); // update throws SignatureException
 
@@ -41,15 +45,14 @@ public class Cryptography {
     public static PublicKey stringToPublicKey(String publicKeyString) throws NoSuchAlgorithmException, InvalidKeySpecException {
             byte[] keyBytes = Base64.getDecoder().decode(publicKeyString);
             X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA"); // getInstance throws NoSuchAlgorithmException
+            KeyFactory keyFactory = KeyFactory.getInstance(keyAlgorithm); // getInstance throws NoSuchAlgorithmException
             return keyFactory.generatePublic(spec); // generatePublic throws InvalidKeySpecException
     }
 
     public static PrivateKey stringToPrivateKey(String privateKeyString) throws NoSuchAlgorithmException, InvalidKeySpecException {
             byte[] keyBytes = Base64.getDecoder().decode(privateKeyString);
             PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            KeyFactory keyFactory = KeyFactory.getInstance(keyAlgorithm);
             return keyFactory.generatePrivate(spec);
     }
-
 }

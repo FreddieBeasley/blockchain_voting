@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Set;
@@ -167,7 +168,7 @@ public class Persistence {
 
         try {
             networkManager = NetworkParser.JSONToNetworkManager(networkManagerJSON, host, port,localPeer);
-        } catch (MalformedJSONException | NoSuchAlgorithmException e) {
+        } catch (MalformedJSONException | NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
             throw new LoadException("data/network_manager.json is malformed", e);
         }
 
@@ -210,7 +211,7 @@ public class Persistence {
         return knownPeers;
     }
 
-    private NetworkManager attemptNetworkManagerCreationWithOnlyKnownPeers() throws LoadException {
+    private NetworkManager attemptNetworkManagerCreationWithOnlyKnownPeers() throws LoadException, InvalidAlgorithmParameterException {
         try {
             return new NetworkManager(host, port, localPeer, attemptKnownPeersLoad());
         } catch (NoSuchAlgorithmException e) {
@@ -218,7 +219,7 @@ public class Persistence {
         }
     }
 
-    private NetworkManager createNewNetworkManager() throws NoSuchAlgorithmException {
+    private NetworkManager createNewNetworkManager() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         return new NetworkManager(host, port,localPeer, new KnownPeers());
     }
 
@@ -235,7 +236,7 @@ public class Persistence {
             NetworkManager newNetworkManager = attemptNetworkManagerCreationWithOnlyKnownPeers();
             logger.info("Successfully loaded networkManager without cryptographic keys");
             return newNetworkManager;
-        } catch (LoadException e) {
+        } catch (LoadException | InvalidAlgorithmParameterException e) {
             logger.warn("Error creating network manager with known nodes" + Exceptions.buildExceptionChain(e) );
         }
 
@@ -243,7 +244,7 @@ public class Persistence {
             NetworkManager newNetworkManager = createNewNetworkManager();
             logger.info("New network manager created");
             return newNetworkManager;
-        } catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
             logger.error("Error creating new network manager", e);
             throw new RuntimeException();
         }
