@@ -1,6 +1,6 @@
 package app.resources.network.resources;
 
-import app.resources.exceptions.InvalidPublicKeyException;
+import app.resources.exceptions.InvalidException;
 import app.resources.util.Cryptography;
 
 import java.security.NoSuchAlgorithmException;
@@ -14,14 +14,14 @@ public class RemotePeer{
     private final PublicKey publicKey;
 
     // Initialisation
-    public RemotePeer(String host, int port, String publicKey) throws InvalidPublicKeyException {
+    public RemotePeer(String host, int port, String publicKey) throws InvalidException {
         this.host = host;
         this.port = port;
 
         try {
             this.publicKey = Cryptography.stringToPublicKey(publicKey);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new InvalidPublicKeyException("");
+        } catch ( InvalidException e) {
+            throw new InvalidException("");
         }
     }
 

@@ -1,0 +1,12 @@
+// Sending Messages
+{
+  "sender" : "PublicKey associated with the other node",
+  "message_type" : ["new_vote" , "new_block", "new_peer", "request_blockchain"],
+  "data" : {
+    "voter" : "public_key",
+    "voteValue": "int",
+    "signature": "string"
+  },
+  "signature" : "ensure data integrity"
+}
+

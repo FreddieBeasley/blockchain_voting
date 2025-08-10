@@ -1,24 +1,20 @@
 <configuration>
 
-    <!-- Log message format -->
-    <property name="LOG_PATTERN"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{20}) - %msg%n"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{20} - %msg%n"/>
 
-    <!-- Console output with color support -->
-    <appender name="COLORED_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+    <appender name="INMEMORY" class="app.resources.logging.LogAppender" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
             <pattern>${LOG_PATTERN}</pattern>
         </encoder>
     </appender>
 
-    <!-- Root logger with INFO level -->
     <root level="INFO">
-        <appender-ref ref="COLORED_CONSOLE"/>
+        <appender-ref ref="INMEMORY" />
+        <appender-ref ref="CONSOLE" />
     </root>
 
-    <!-- Optional: More granular log levels -->
-    <!--
-    <logger name="com.yourcompany.blockchain.storage" level="DEBUG"/>
-    -->
-
 </configuration>
+
+

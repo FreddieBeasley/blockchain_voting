@@ -1,6 +1,7 @@
-package app.resources.util.JSONParsers;
+package app.resources.JSONParsers;
 
 
+import app.LocalNode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,10 +19,10 @@ public class BlockchainParser {
     public static Vote JSONToVote(JSONObject data) throws MalformedJSONException {
 
         if (!data.has("voter")) {
-            throw new MalformedJSONException("VOTE: Required field 'voter' missing");
+            throw new MalformedJSONException("Required field 'voter' missing");
         }
         if (!data.has("voteValue")) {
-            throw new MalformedJSONException("VOTE: Required field 'voteValue' missing");
+            throw new MalformedJSONException("Required field 'voteValue' missing");
         }
 
         String voter;
@@ -29,15 +30,10 @@ public class BlockchainParser {
 
         try {
             voter = data.getString("voter");
-        } catch (JSONException e) {
-            throw new MalformedJSONException("VOTE: Required field 'voter' is malformed");
-        }
-        try {
             voteValue = data.getInt("voteValue");
         } catch (JSONException e) {
-            throw new MalformedJSONException("VOTE: Required field 'voteValue' is malformed");
+            throw new MalformedJSONException("A required field is malformed");
         }
-
 
         if (!data.has("signature")) {
             return new Vote(voter, voteValue);
@@ -86,25 +82,16 @@ public class BlockchainParser {
 
         try {
             hash = data.getString("hash");
-        } catch (JSONException e) {
-            throw new MalformedJSONException("BLOCK: Required field 'hash' is malformed", e);
-        }
-        try {
-            prevHash = data.getString("previousHash");
-        } catch (JSONException e) {
-            throw new MalformedJSONException("BLOCK: Required field 'previousHash' is malformed", e);
-        }
-        try {
-            timestamp = data.getLong("timestamp");
-        } catch (JSONException e) {
-            throw new MalformedJSONException("BLOCK: Required field 'timestamp' is malformed", e);
-        }
-        try {
-            nonce = data.getInt("nonce");
-        } catch (JSONException e) {
-            throw new MalformedJSONException("BLOCK: Required field 'nonce' is malformed", e);
-        }
 
+            prevHash = data.getString("previousHash");
+
+            timestamp = data.getLong("timestamp");
+
+            nonce = data.getInt("nonce");
+
+        } catch (JSONException e) {
+            throw new MalformedJSONException("A required field is malformed", e);
+        }
 
         try {
             voteList = new ArrayList<>();
@@ -117,7 +104,7 @@ public class BlockchainParser {
                 voteList.add(newVote);
             }
         } catch (JSONException | MalformedJSONException e) {
-            throw new MalformedJSONException("BLOCK: Required field 'votes' is malformed", e);
+            throw new MalformedJSONException("A required field is malformed", e);
         }
 
         return new Block(prevHash, voteList, hash, timestamp, nonce);
@@ -142,7 +129,7 @@ public class BlockchainParser {
     }
 
     // Blockchain
-    public static Blockchain JSONToBlockchain(JSONObject data) throws MalformedJSONException {
+    public static Blockchain JSONToBlockchain(JSONObject data, LocalNode localNode) throws MalformedJSONException {
         if (!data.has("chain")) {
             throw new MalformedJSONException("Required field 'chain' missing");
         }
@@ -159,36 +146,26 @@ public class BlockchainParser {
             throw new MalformedJSONException("Required field 'difficulty' missing");
         }
 
+        int difficulty;
         List<Block> chain;
         Set<String> remainingVoters;
         Queue<Vote> pendingVotes;
-        int difficulty;
-
-        try {
-            chain = JSONToChain(data.getJSONArray("chain"));
-        } catch (MalformedJSONException e) {
-            throw new MalformedJSONException("Required field 'chain' is malformed", e);
-        }
-
-        try {
-            remainingVoters = JSONToRemainingVoters(data.getJSONArray("remainingVoters"));
-        } catch (JSONException e) {
-            throw new MalformedJSONException("Required field 'remainingVoters' is malformed", e);
-        }
-
-        try {
-            pendingVotes = JSONToPendingVotes(data.getJSONArray("pendingVotes"));
-        } catch (MalformedJSONException e) {
-            throw new MalformedJSONException("Required field 'pendingVotes' is malformed", e);
-        }
 
         try {
             difficulty = data.getInt("difficulty");
-        } catch (JSONException e) {
-            throw new MalformedJSONException("Required field 'difficulty' is malformed", e);
+
+            chain = JSONToChain(data.getJSONArray("chain"));
+
+            remainingVoters = JSONToRemainingVoters(data.getJSONArray("remainingVoters"));
+
+            pendingVotes = JSONToPendingVotes(data.getJSONArray("pendingVotes"));
+
+        } catch (MalformedJSONException e) {
+            throw new MalformedJSONException("A required field is malformed", e);
         }
 
-        return new Blockchain(chain, remainingVoters, pendingVotes, difficulty);
+
+        return new Blockchain(localNode, difficulty, chain, remainingVoters, pendingVotes);
     }
 
     public static JSONObject BlockchainToJSON(Blockchain blockchain) {

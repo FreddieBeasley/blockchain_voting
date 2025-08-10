@@ -1,8 +1,8 @@
 package app.resources;
 
-import app.LocalPeer;
+import app.LocalNode;
 
-import app.resources.exceptions.InvalidBlockchainException;
+import app.resources.exceptions.InvalidException;
 import app.resources.exceptions.LoadException;
 import app.resources.exceptions.MalformedJSONException;
 import app.resources.exceptions.PersistenceException;
@@ -10,8 +10,8 @@ import app.resources.util.Exceptions;
 import app.resources.network.KnownPeers;
 import app.resources.util.FileHandlers;
 
-import app.resources.util.JSONParsers.BlockchainParser;
-import app.resources.util.JSONParsers.NetworkParser;
+import app.resources.JSONParsers.BlockchainParser;
+import app.resources.JSONParsers.NetworkParser;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +30,7 @@ public class Persistence {
     // TEMP - Needed for NetworkManager
     private final String host;
     private final int port;
-    private final LocalPeer localPeer;
+    private final LocalNode localNode;
 
     // Fields
     private final File persistentBlockchain; // resources.Blockchain
@@ -42,10 +42,10 @@ public class Persistence {
     private final Logger logger; // logging
 
     // Initialisation
-    public Persistence(String host, int port, LocalPeer localPeer) { // default initialisation
+    public Persistence(String host, int port, LocalNode localNode) { // default initialisation
         this.host = host;
         this.port = port;
-        this.localPeer = localPeer;
+        this.localNode = localNode;
 
         this.persistentBlockchain = new File("src/main/data/blockchain.json");
 
@@ -56,10 +56,10 @@ public class Persistence {
         this.logger = LoggerFactory.getLogger(Persistence.class);
     }
 
-    public Persistence(String persistentBlockchain, String persistentNetworkManager, String registeredVoters, String host, int port, LocalPeer localPeer) { // custom initialisation
+    public Persistence(String persistentBlockchain, String persistentNetworkManager, String registeredVoters, String host, int port, LocalNode localNode) { // custom initialisation
         this.host = host;
         this.port = port;
-        this.localPeer = localPeer;
+        this.localNode = localNode;
 
         this.persistentBlockchain = new File(persistentBlockchain);
 
@@ -88,14 +88,14 @@ public class Persistence {
         Blockchain newBlockchain;
 
         try {
-            newBlockchain = BlockchainParser.JSONToBlockchain(blockchainJson); // Throws MalformedJSONException
+            newBlockchain = BlockchainParser.JSONToBlockchain(blockchainJson, localNode); // Throws MalformedJSONException
         } catch (MalformedJSONException e) {
             throw new LoadException("data/blockchain is malformed", e);
         }
 
         try {
             newBlockchain.isValid(); // Throws InvalidBlockchainException
-        } catch (InvalidBlockchainException e) {
+        } catch (InvalidException e) {
             throw new LoadException("Loaded blockchain is invalid", e);
         }
 
@@ -122,11 +122,11 @@ public class Persistence {
     }
 
     public Blockchain attemptBlockchainCreationWithRegisteredVoters() throws LoadException {
-        return new Blockchain(attemptRegisteredVotersLoad()); // throws LoadException
+        return new Blockchain(localNode, attemptRegisteredVotersLoad()); // throws LoadException
     }
 
     private Blockchain createNewBlockchain() {
-        return new Blockchain();
+        return new Blockchain(localNode);
     }
 
     public Blockchain loadBlockchain() {
@@ -167,7 +167,7 @@ public class Persistence {
         NetworkManager networkManager;
 
         try {
-            networkManager = NetworkParser.JSONToNetworkManager(networkManagerJSON, host, port,localPeer);
+            networkManager = NetworkParser.JSONToNetworkManager(networkManagerJSON, host, port, localNode);
         } catch (MalformedJSONException | NoSuchAlgorithmException | InvalidAlgorithmParameterException e) {
             throw new LoadException("data/network_manager.json is malformed", e);
         }
@@ -213,14 +213,14 @@ public class Persistence {
 
     private NetworkManager attemptNetworkManagerCreationWithOnlyKnownPeers() throws LoadException, InvalidAlgorithmParameterException {
         try {
-            return new NetworkManager(host, port, localPeer, attemptKnownPeersLoad());
+            return new NetworkManager(host, port, localNode, attemptKnownPeersLoad());
         } catch (NoSuchAlgorithmException e) {
             throw new LoadException("network_manager.json is malformed", e);
         }
     }
 
     private NetworkManager createNewNetworkManager() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-        return new NetworkManager(host, port,localPeer, new KnownPeers());
+        return new NetworkManager(host, port, localNode, new KnownPeers());
     }
 
     public NetworkManager loadNetworkManager() {
@@ -270,6 +270,11 @@ public class Persistence {
             throw new PersistenceException(e.getMessage());
         }
    }
+
+   // Registered Voters
+    public void addVoterToRegisteredVoters(String voter) throws IOException {
+        FileHandlers.appendToJSONFileArray(registeredVoters.getPath(),voter);
+    }
 
 }
 

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Control Panel Network</title>
+    <!-- General Styling-->
+    <style>
+        body {
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            background-color: lightgray;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            height: 40px;
+            background-color: gray;
+        }
+        nav a {
+            text-decoration: none;
+            color: black;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .title {
+            padding-left: 20px;
+        }
+
+        .separator {
+            width: 600px;
+            height: 3px;
+            border-radius: 1px;
+            margin: 5px;
+            background-color: black;
+            border: none;
+        }
+
+        #network-container {
+            font-size: 15px;
+            white-space: pre-wrap;
+            color: black;
+
+
+            padding-left: 20px;
+            min-height: 500px;
+        }
+    </style>
+
+    <!-- Connect Form Styling-->
+    <style>
+        .outer {
+            background-color: whitesmoke;
+            padding: 30px;
+            border-radius: 15px;
+            border: 4px solid black;
+            margin: 10px;
+            height: 250px;
+            width: 200px;
+        }
+
+        .submit-button {
+            width: 80px;
+            height: 30px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        hr {
+            border: none;
+            height: 2px;
+            background-color: black;
+            width: 100%;
+        }
+
+        .text_input{
+            width: 100%;
+        }
+
+        .response {
+            font-weight: bold;
+            color: navy;
+            width: 100%;
+        }
+
+
+    </style>
+</head>
+<body>
+<nav>
+    <a href="/log-page">Logs</a> |
+    <a href="/blockchain-page">Blockchain</a> |
+    <a href="/network-page">Network</a>
+</nav>
+
+<h1 class="title">Network</h1>
+<hr class="separator" />
+<div class="outer">
+    <h1>Connect</h1><br>
+    <hr>
+    <form id="voteForm">
+
+        <label for="host">Host</label>
+        <input class="text_input" type="text" id="host" name="voterId" required><br>
+
+        <hr>
+
+        <label for="port">Port</label>
+        <input class="text_input" type="text" id="port" name="privateKey" required><br>
+
+        <hr>
+        <button class="submit-button" type="submit">Connect</button>
+    </form>
+    <div class="response-outer">
+        <p class="response" id="vote-response"></p>
+    </div>
+</div>
+
+<hr class="separator" />
+<div id="network-container">Loading network...</div>
+
+<!-- javascript for fetching peers-->
+<script>
+    async function fetchNetworkPeers() {
+        try {
+            const resp = await fetch('/network-peers');
+            if (!resp.ok) throw new Error('Network response not ok');
+
+            const peers = await resp.json();
+            const container = document.getElementById('network-container');
+
+            container.textContent = JSON.stringify(peers, null, 4);
+        } catch (e) {
+            document.getElementById('network-container').textContent = 'Failed to load networks: ' + e;
+        }
+    }
+    fetchNetworkPeers();
+    // Update logs every 5 seconds
+    setInterval(fetchNetworkPeers, 5000);
+</script>
+</body>
+</html>

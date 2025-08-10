@@ -1,4 +1,4 @@
-import app.LocalPeer;
+import app.LocalNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,9 +10,9 @@ public class Testing {
         System.out.println("CWD: " + System.getProperty("user.dir"));
 
         // initialise peer
-        LocalPeer localpeer = new LocalPeer(1000, 2000);
+        LocalNode localpeer = new LocalNode(1000, 2000, 3000);
 
-        // start web server
+        // start peer
         localpeer.start();
         
     }

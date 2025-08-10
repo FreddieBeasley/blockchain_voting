@@ -2,6 +2,8 @@ package app.resources.network;
 
 // Imports
 
+import app.resources.exceptions.ArchivedException;
+import app.resources.exceptions.OverflowException;
 import app.resources.network.resources.RemotePeer;
 
 import java.util.ArrayList;
@@ -30,35 +32,37 @@ public class KnownPeers {
         return knownPeers;
     }
 
-    public RemotePeer getKnownPeer(int index) {
-        return knownPeers.get(index);
-    }
-
     public int getMaxPeers() {
         return maxPeers;
     }
 
-    // Standard Methods
-    public boolean isEmpty() {
-        return knownPeers.isEmpty();
+    public int getSize() {
+        return knownPeers.size();
+    }
+
+    public RemotePeer getPeer(int index){
+        return knownPeers.get(index);
     }
 
     public boolean isFull() {
         return knownPeers.size() == maxPeers;
     }
 
-    public boolean containsPeer(RemotePeer node) {
-        return knownPeers.contains(node);
-    }
-
-    public boolean addPeer(RemotePeer node) {
-        return knownPeers.add(node);
-    }
-
-    public boolean removePeer(RemotePeer node) throws Exception{
-        if (knownPeers.remove(node)) {
-            return true;
+    // Methods
+    public void addPeer(RemotePeer node) throws ArchivedException, OverflowException {
+        if (knownPeers.contains(node)) {
+            throw new ArchivedException("Peer is already in known peers");
         }
-        return false;
+
+        if (isFull()) {
+            throw new OverflowException("Known peers is full");
+        }
+
+        knownPeers.add(node);
     }
+
+    public boolean removePeer(RemotePeer node) {
+        return knownPeers.remove(node);
+    }
+
 }

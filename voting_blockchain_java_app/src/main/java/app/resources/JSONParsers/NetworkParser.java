@@ -1,12 +1,12 @@
-package app.resources.util.JSONParsers;
+package app.resources.JSONParsers;
 
+import app.resources.exceptions.InvalidException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import app.LocalPeer;
+import app.LocalNode;
 import app.resources.NetworkManager;
-import app.resources.exceptions.InvalidPublicKeyException;
 import app.resources.exceptions.MalformedJSONException;
 import app.resources.network.KnownPeers;
 import app.resources.network.resources.RemotePeer;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class NetworkParser {
     // Remote Peer
-    public static RemotePeer JSONToRemotePeer(JSONObject data) throws MalformedJSONException {
+    public static RemotePeer JSONToRemotePeer(JSONObject data) throws MalformedJSONException, InvalidException {
         if (!data.has("host")){
             throw new MalformedJSONException("Required field 'host' missing");
         }
@@ -51,11 +51,7 @@ public class NetworkParser {
             throw new MalformedJSONException("Required field 'publicKey' is malformed", e);
         }
 
-        try {
-            return new RemotePeer(host, port, publicKey);
-        } catch (InvalidPublicKeyException e) {
-            throw new MalformedJSONException("Remote Peer has an Invalid Public Key", e);
-        }
+        return new RemotePeer(host, port, publicKey);
     }
 
     public static JSONObject remotePeerToJSON(RemotePeer node){
@@ -69,7 +65,7 @@ public class NetworkParser {
     }
 
     // Known Peers List
-    public static List<RemotePeer> remotePeerListToJSON(JSONArray data) throws MalformedJSONException {
+    public static List<RemotePeer> remotePeerListToJSON(JSONArray data) throws MalformedJSONException, InvalidException {
         List<RemotePeer> remotePeerList = new ArrayList<>();
         for (Object o : data) {
             JSONObject JSONRemotePeer = (JSONObject) o;
@@ -108,7 +104,7 @@ public class NetworkParser {
 
         try {
             knownPeers = remotePeerListToJSON(data.getJSONArray("known_peers_list"));
-        } catch (JSONException e) {
+        } catch (JSONException | InvalidException e) {
             throw new MalformedJSONException("Required field 'known_peers_list' is malformed", e);
         }
 
@@ -131,7 +127,7 @@ public class NetworkParser {
     // Public Keys & Private Keys do not need to be converted
 
     // Does not load or store port and host - this gets passed in from the localNode object
-    public static NetworkManager  JSONToNetworkManager(JSONObject data, String host, int port, LocalPeer localPeer) throws MalformedJSONException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    public static NetworkManager  JSONToNetworkManager(JSONObject data, String host, int port, LocalNode localNode) throws MalformedJSONException, NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         if (!data.has("public_key")){
             throw new MalformedJSONException("Required field 'publicKey' missing");
         }
@@ -166,7 +162,7 @@ public class NetworkParser {
             throw new MalformedJSONException("Required field 'known_peers' is malformed", e);
         }
 
-        return new NetworkManager(host, port, localPeer, knownPeers);
+        return new NetworkManager(host, port, localNode, knownPeers);
     }
 
     public static JSONObject networkManagerToJSON(NetworkManager networkManager) {

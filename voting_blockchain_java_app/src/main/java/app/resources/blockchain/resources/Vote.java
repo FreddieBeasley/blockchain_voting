@@ -3,8 +3,9 @@ package app.resources.blockchain.resources;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
+
+import app.resources.exceptions.InvalidException;
 import app.resources.util.Cryptography;
-import app.resources.exceptions.InvalidVoteException;
 
 public class Vote {
 
@@ -31,14 +32,6 @@ public class Vote {
         return voter;
     }
 
-    public PublicKey getVoterAsPublicKey(){
-        try {
-            return Cryptography.stringToPublicKey(voter);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException e){
-            throw new RuntimeException(e);
-        }
-    }
-
     public int  getVoteValue() {
         return voteValue;
     }
@@ -48,6 +41,8 @@ public class Vote {
     }
 
     // Methods
+
+    // Methods may not be needed as votes are submitted fully signed
     public void signVote(PrivateKey privateKey) {
         try{
             String data = voter + voteValue;
@@ -62,21 +57,21 @@ public class Vote {
         }
     }
 
-    public void isValid() throws InvalidVoteException {
+    public void isValid() throws InvalidException {
         boolean isValid;
 
         try {
             String data = voter + "|||"  + voteValue;
             Signature verifier = Signature.getInstance("SHA256withRSA"); // Signature object for SHA-256
-            verifier.initVerify(getVoterAsPublicKey()); // Initialises the object for verification ( with expected signers public_key )
+            verifier.initVerify(Cryptography.stringToPublicKey(getVoter())); // Initialises the object for verification ( with expected signers public_key )
             verifier.update(data.getBytes()); // Updates data to be verified ( with expected vote data )
             isValid = verifier.verify(Base64.getDecoder().decode(signature));
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException e) {
-            throw new InvalidVoteException("Unable to verify vote", e);
+            throw new InvalidException("VOTE: Unable to verify", e);
         }
 
         if (!isValid) {
-            throw new InvalidVoteException("Invalid Signature");
+            throw new InvalidException("VOTE: Invalid Signature");
         }
 
 
