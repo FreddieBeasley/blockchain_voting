@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a3cff98b-7f9b-4801-8536-cbb70f415dd3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/target/classes/app/resources/ControlServer$connectHandler.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/data/blockchain.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/blockchain.json" afterDir="false" />
@@ -21,6 +22,20 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/app/resources/network/KnownPeers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/resources/network/KnownPeers.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/app/resources/network/MessageSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/resources/network/MessageSender.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/registration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/LocalNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/LocalNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/Blockchain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/Blockchain.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/ControlServer$LogHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/ControlServer$LogHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/ControlServer$StaticFileHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/ControlServer$StaticFileHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/ControlServer$blockchainHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/ControlServer$blockchainHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/ControlServer$networkPeersHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/ControlServer$networkPeersHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/ControlServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/ControlServer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/JSONParsers/NetworkParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/JSONParsers/NetworkParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/NetworkManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/NetworkManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/WebServer$VoteHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/WebServer$VoteHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/WebServer$VoterHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/WebServer$VoterHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/network/KnownPeers.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/network/KnownPeers.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/app/resources/network/MessageSender.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/app/resources/network/MessageSender.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/registration.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -213,7 +228,7 @@
       <workItem from="1754320267868" duration="20741000" />
       <workItem from="1754405041982" duration="14299000" />
       <workItem from="1754464674440" duration="109856000" />
-      <workItem from="1754906546140" duration="14331000" />
+      <workItem from="1754906546140" duration="14641000" />
     </task>
     <servers />
   </component>
