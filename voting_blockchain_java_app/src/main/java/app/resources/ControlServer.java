@@ -9,16 +9,13 @@ import com.sun.net.httpserver.HttpHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ControlServer {
@@ -59,6 +56,7 @@ public class ControlServer {
         server.createContext("/logs", new LogHandler(logAppender));
         server.createContext("/blockchain", new blockchainHandler());
         server.createContext("/network-peers", new networkPeersHandler());
+        server.createContext("/connect", new connectHandler());
 
 
         //server.createContext("/persist", new persistHandler()); // overrides auto-persist
@@ -173,7 +171,8 @@ public class ControlServer {
         }
     }
 
-   public class networkPeersHandler implements HttpHandler {
+    // Get Network
+    public class networkPeersHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -182,7 +181,6 @@ public class ControlServer {
             }
 
             JSONObject networkPeers = localNode.getNetworkPeersJSON();
-
 
             byte[] responseBytes = networkPeers.toString().getBytes();
             exchange.getResponseHeaders().set("Content-Type", "application/json; charset=utf-8");
@@ -193,11 +191,50 @@ public class ControlServer {
             }
 
         }
+    }
+
+    public class connectHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            if (!exchange.getRequestMethod().equals("POST")) {
+                exchange.sendResponseHeaders(400, 0);
+                return;
+            }
+
+            // Reads raw body of HTTP request
+            InputStream in =  exchange.getRequestBody();
+
+            // Convert from InputStream to String
+            String body = new BufferedReader(new InputStreamReader(in)).lines().reduce("", (a, b) -> a + b);
+
+            // Close InputStream
+            in.close();
+
+            try {
+                JSONObject JSONbody = new JSONObject(body);
+                String Host =  JSONbody.getString("host");
+                int Port =  JSONbody.getInt("port");
+
+                localNode.connectToNewPeer(Host, Port);
+
+                String response = "Connected to peer '" + Host + ":" + Port + "'";
+                exchange.sendResponseHeaders(200, response.length());
+
+                try (OutputStream out = exchange.getResponseBody()) {
+                    out.write(response.getBytes());
+                }
+            } catch (IOException e) {
+                logger.warn("Unable to connect to peer");
+
+                String response = "Connection failed: "  + e.getMessage();
+                exchange.sendResponseHeaders(400, response.length());
+
+                try (OutputStream out = exchange.getResponseBody()) {
+                    out.write(response.getBytes());
+                }
+            }
+        }
    }
-
-
-
-
 }
 
 

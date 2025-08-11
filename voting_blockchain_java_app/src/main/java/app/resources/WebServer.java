@@ -116,13 +116,12 @@ public class WebServer {
             in.close();
 
             try {
-                logger.info("New vote received: " + body);
+                logger.info("New vote submitted");
 
                 // Convert String to JSON to Vote
                 Vote vote = BlockchainParser.JSONToVote(new JSONObject(body));
 
-                // Send vote to LocalPeer
-                logger.info("New vote send for handling: " + vote.serialise());
+                // Send vote to LocalPeer;
                 localNode.handleWebVote(vote);
 
                 // Send back success response
@@ -135,7 +134,7 @@ public class WebServer {
 
             } catch (Exception e) {
                 // Send back reject response
-                logger.info("New vote rejected: " + body);
+                logger.info("New vote rejected");
 
                 String response = "Vote rejected: " + e.getMessage();
                 exchange.sendResponseHeaders(400, response.length());

@@ -45,7 +45,6 @@ public class LocalNode {
         this.controlServer = new ControlServer(host, hostPort, this);
 
         persistState();
-        logger.info("Local Peer state persisted");
     }
 
     // Getter Methods - for Control server
@@ -61,17 +60,21 @@ public class LocalNode {
         networkManager.formulateOutgoingConnectionRequest(host, port);
     }
 
-    // Methods - From WebServer
+    // main method
     public void start(){
+        // ( Runs Voting and Registering Server )
         Thread webThread = new Thread(webServer::start);
         webThread.start();
 
+        // ( Runs Network Communication Server )
         Thread networkThread = new Thread(networkManager::start);
         networkThread.start();
 
+        // ( Runs Control Server )
         Thread controlThread = new Thread(controlServer::start);
         controlThread.start();
 
+        // ( Requests Blockchain From Peer Every Minute )
         Thread consensusThread = new Thread(() -> {
             while (true) {
                 try {
@@ -85,10 +88,11 @@ public class LocalNode {
         });
         consensusThread.start();
 
+        // ( Persists Blockchain Every Minute )
         Thread persistenceThread = new Thread(() -> {
             while (true) {
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(60000);
                 } catch (InterruptedException e) {
                     logger.error("Error with persistence thread: ", e);
                 }
@@ -97,7 +101,19 @@ public class LocalNode {
         });
         persistenceThread.start();
 
-        // want a thread that attempts consensus every 30 seconds ( for testing, in reality every 5 minutes )
+        // ( Attempts Mining Every Minute )
+        Thread miningThread = new Thread(() -> {
+            while (true) {
+                try {
+                    //noinspection BusyWait
+                    Thread.sleep(60000);
+                } catch (InterruptedException e) {
+                    logger.error("Error with mining thread: ", e);
+                }
+                blockchain.createNewBlock();
+            }
+        });
+        miningThread.start();
 
         try {
             webThread.join();
@@ -108,17 +124,19 @@ public class LocalNode {
 
     }
 
+    // Handling created data
     public void handleWebVote(Vote vote){
         logger.info("Vote received from web server");
+        logger.info("Vote sent to blockchain pending votes");
         Thread blockchainThread = new Thread(() -> {
-            logger.info("Vote sent to blockchain pending votes");
+
             blockchain.handleNewVote(vote);
 
         });
         blockchainThread.start();
 
+        logger.info("Vote sent to network for distribution");
         Thread networkThread = new Thread(() -> {
-            logger.info("Vote sent to network for distribution");
             networkManager.formulateOutgoingVote(vote);
         });
         networkThread.start();
@@ -126,14 +144,26 @@ public class LocalNode {
 
     public void handleWebVoter(String voter){
         logger.info("New voter received from web server");
-
+        logger.info("New voter sent to blockchain for remaining voters");
         sendVoterToBlockchain(voter);
 
+        logger.info("new voter sent to network for distribution");
         Thread networkThread = new Thread(() -> {
-            logger.info("Voter sent to network for distribution");
+
             networkManager.formulateOutgoingVoter(voter);
         });
         networkThread.start();
+
+    }
+
+    public void handleNewBlock(Block block){
+        logger.info("New block received from blockchain");
+        logger.info("New block sent to network for distribution");
+        Thread networkThread = new Thread(() -> {
+            networkManager.formulateOutgoingBlock(block);
+        });
+        networkThread.start();
+
 
     }
 
@@ -149,7 +179,6 @@ public class LocalNode {
 
 
         Thread blockchainThread = new Thread(() -> {
-            logger.info("Voter sent to blockchain");
             blockchain.handleNewVoter(voter);
         });
 
@@ -157,26 +186,12 @@ public class LocalNode {
     }
 
 
-    // Methods - From Blockchain
-    public void handleNewBlock(Block block){
-        logger.info("New block received from blockchain");
-        Thread networkThread = new Thread(() -> {
-            logger.info("New block sent to network for distribution");
-            networkManager.formulateOutgoingBlock(block);
-            persistBlockchain(); // handleNewBlock() only called when new block added to chain
-        });
-        networkThread.start();
-
-
-    }
-
-    // Methods - Received from network
+    // Handling received data
     public void handleNetworkVote(Vote vote){
         logger.info("Vote received from network");
+        logger.info("Vote sent to blockchain pending votes");
         Thread networkThread = new Thread(() -> {
-            logger.info("Vote sent to blockchain pending votes");
             blockchain.handleNewVote(vote);
-            persistBlockchain();
         });
         networkThread.start();
     }
@@ -187,16 +202,17 @@ public class LocalNode {
 
     public void handleNetworkBlock(Block block){
         logger.info("Block received from network");
+        logger.info("Block sent to blockchain for review");
         Thread blockchainThread = new Thread(() -> {
-            logger.info("Block sent to blockchain");
             blockchain.handleNewBlock(block);
         });
         blockchainThread.start();
     }
 
     // ( Performing consensus mechanism )
+
     public void handleNetworkBlockchain(Blockchain newBlockchain) {
-        logger.info("New blockchain received from blockchain");
+        logger.info("New blockchain received from network");
         if(newBlockchain.getLength() < blockchain.getLength()){
             logger.info("New blockchain discarded: length shorter");
             return;
@@ -214,31 +230,27 @@ public class LocalNode {
 
         logger.info("New blockchain accepted");
         blockchain = newBlockchain;
-        persistBlockchain();
     }
 
-   // Persistence
-    public void persistBlockchain(){
-        try {
-            persistence.persistBlockchain(blockchain);
-            logger.info("Blockchain persisted");
-        } catch (PersistenceException e) {
-            logger.error("Persistence error with NetworkManager: ", e);
-        }
+    // NetworkConnectionHandled in NetworkManager
+
+    // Persistence
+    public void persistBlockchain() throws PersistenceException {
+        persistence.persistBlockchain(blockchain);
     }
 
-    public void persistNetworkManager(){
-        try {
-            persistence.persistNetworkManager(networkManager);
-            logger.info("NetworkManager persisted");
-        } catch (PersistenceException e) {
-            logger.error("Persistence error with NetworkManager: ", e);
-        }
+    public void persistNetworkManager() throws PersistenceException {
+        persistence.persistNetworkManager(networkManager);
     }
 
     public void persistState(){
-        persistBlockchain();
-        persistNetworkManager();
+        try {
+            persistBlockchain();
+            persistNetworkManager();
+            logger.info("Successfully persisted node");
+        }  catch (PersistenceException e) {
+            logger.error("Error persisting node: " + e.getMessage());
+        }
     }
 
 }

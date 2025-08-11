@@ -4,7 +4,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a3cff98b-7f9b-4801-8536-cbb70f415dd3" name="Changes" comment="" />
+    <list default="true" id="a3cff98b-7f9b-4801-8536-cbb70f415dd3" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/data/blockchain.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/blockchain.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/data/network_manager.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/network_manager.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/data/registered_voters.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/data/registered_voters.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/frontend/owner/network.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/frontend/owner/network.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/frontend/user/vote.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/frontend/user/vote.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/LocalNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/LocalNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/resources/Blockchain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/resources/Blockchain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/resources/ControlServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/resources/ControlServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/resources/JSONParsers/NetworkParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/resources/JSONParsers/NetworkParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/resources/NetworkManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/resources/NetworkManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/resources/WebServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/resources/WebServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/resources/network/KnownPeers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/resources/network/KnownPeers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/app/resources/network/MessageSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/app/resources/network/MessageSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/registration.java" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,34 +58,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Main2.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Testing.executor&quot;: &quot;Run&quot;,
-    &quot;Application.registration.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.index.html.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript Debug.vote.html.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;PHP Script.index.php.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_directory_selection&quot;: &quot;/Users/freddiebeasley/Desktop/Work/ComputerScience/programming_projects/projects_active/blockchain/voting/voting_blockchain_java_app/src/main/java&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/freddiebeasley/Desktop/Work/ComputerScience/programming_projects/projects_active/blockchain/voting/voting_blockchain_java_app&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.web.browsers&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.Main2.executor": "Run",
+    "Application.Testing.executor": "Run",
+    "Application.registration.executor": "Run",
+    "JavaScript Debug.index.html.executor": "Run",
+    "JavaScript Debug.vote.html.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "PHP Script.index.php.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_directory_selection": "/Users/freddiebeasley/Desktop/Work/ComputerScience/programming_projects/projects_active/blockchain/voting/voting_blockchain_java_app/src/main/java",
+    "last_opened_file_path": "/Users/freddiebeasley/Desktop/Work/ComputerScience/github/blockchain_voting/voting_blockchain_java_app",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="app.resources" />
@@ -196,6 +213,7 @@
       <workItem from="1754320267868" duration="20741000" />
       <workItem from="1754405041982" duration="14299000" />
       <workItem from="1754464674440" duration="109856000" />
+      <workItem from="1754906546140" duration="14331000" />
     </task>
     <servers />
   </component>

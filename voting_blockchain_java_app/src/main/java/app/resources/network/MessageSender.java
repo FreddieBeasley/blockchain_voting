@@ -11,34 +11,25 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.security.InvalidParameterException;
 
 public class MessageSender {
-    private static final Logger logger =  LoggerFactory.getLogger(MessageSender.class);
-    private final NetworkManager networkManager;
+    private static final Logger logger = LoggerFactory.getLogger(MessageSender.class);
 
-    public MessageSender(NetworkManager networkManager) {
-        this.networkManager = networkManager;
-    }
+    public static JSONObject send(String host, int port, JSONObject message) throws Exception {
+        try (
+                Socket socket = new Socket(host, port);
+                OutputStream out = socket.getOutputStream();
+                PrintWriter writer = new PrintWriter(out, true);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        ) {
+            String messageString = message.toString();
+            writer.println(messageString);
+            logger.info("Message sent to " + host + ":" + port);
 
-        public void send(String host, int port, JSONObject message){
-            try(
-                    Socket socket = new Socket(host, port);
-                    OutputStream out = socket.getOutputStream();
-                    PrintWriter writer = new PrintWriter(out, true);
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            ) {
-                String messageString = message.toString();
-                writer.println(messageString);
-                logger.info("Message sent to " + host + ":" + port);
+            return new JSONObject(reader.readLine());
 
-                JSONObject response = new JSONObject(reader.readLine());
-
-                networkManager.handleIncomingResponse(response);
-
-
-            } catch (Exception e) {
-                logger.error("Failed to send message to " + host + ":" + port, e);
         }
-
     }
 }
+

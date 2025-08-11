@@ -197,9 +197,6 @@
 
             const content = `${voterId}|||${voteValue}`;
 
-            console.log("Private key string length:", privateKeyString.length);
-            console.log("First few characters:", privateKeyString.slice(0, 30));
-
             const privateKey = await stringToPrivateKey(privateKeyString);
             const signature = await signMessage(privateKey, content);
 
@@ -238,7 +235,7 @@
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', },
                     body: JSON.stringify({voter: publicKeyString}),
-                })
+                });
 
 
                 if (!res.ok) {

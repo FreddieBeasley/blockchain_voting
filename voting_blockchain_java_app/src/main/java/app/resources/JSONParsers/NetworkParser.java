@@ -14,7 +14,9 @@ import app.resources.network.resources.RemotePeer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class NetworkParser {
     // Remote Peer
@@ -65,8 +67,8 @@ public class NetworkParser {
     }
 
     // Known Peers List
-    public static List<RemotePeer> remotePeerListToJSON(JSONArray data) throws MalformedJSONException, InvalidException {
-        List<RemotePeer> remotePeerList = new ArrayList<>();
+    public static Set<RemotePeer> remotePeerSetToJSON(JSONArray data) throws MalformedJSONException, InvalidException {
+        Set<RemotePeer> remotePeerList = new HashSet<>();
         for (Object o : data) {
             JSONObject JSONRemotePeer = (JSONObject) o;
             RemotePeer remotePeer = JSONToRemotePeer(JSONRemotePeer);
@@ -75,7 +77,7 @@ public class NetworkParser {
         return remotePeerList;
     }
 
-    public static JSONArray remotePeerListToJSON(List<RemotePeer> data) {
+    public static JSONArray remotePeerSetToJSON(Set<RemotePeer> data) {
         JSONArray jsonKnownPeers = new JSONArray();
         for (RemotePeer remotePeer : data) {
             jsonKnownPeers.put(remotePeer);
@@ -94,7 +96,7 @@ public class NetworkParser {
         }
 
         int maxPeers;
-        List<RemotePeer>  knownPeers;
+        Set<RemotePeer> knownPeers;
 
         try {
             maxPeers = data.getInt("max_peers");
@@ -103,7 +105,7 @@ public class NetworkParser {
         }
 
         try {
-            knownPeers = remotePeerListToJSON(data.getJSONArray("known_peers_list"));
+            knownPeers = remotePeerSetToJSON(data.getJSONArray("known_peers_list"));
         } catch (JSONException | InvalidException e) {
             throw new MalformedJSONException("Required field 'known_peers_list' is malformed", e);
         }
@@ -117,7 +119,7 @@ public class NetworkParser {
         // MaxPeers
         jsonObject.put("max_peers", knownPeers.getMaxPeers());
 
-        JSONArray JSONKnownPeers = remotePeerListToJSON(knownPeers.getKnownPeers());
+        JSONArray JSONKnownPeers = remotePeerSetToJSON(knownPeers.getKnownPeers());
         jsonObject.put("known_peers_list", JSONKnownPeers);
 
         return jsonObject;

@@ -6,29 +6,28 @@ import app.resources.exceptions.ArchivedException;
 import app.resources.exceptions.OverflowException;
 import app.resources.network.resources.RemotePeer;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class KnownPeers {
     // Fields
-    private final List<RemotePeer> knownPeers;
+    private final Set<RemotePeer> knownPeers;
     private final int maxPeers;
 
     // Load new known peers list
     public KnownPeers() {
-         this.knownPeers = new ArrayList<>();
+         this.knownPeers = new HashSet<>();
          this.maxPeers = 8;
     }
 
     // Load existing known peers list
-    public KnownPeers(List<RemotePeer> knownPeers,  int maxPeers) {
+    public KnownPeers(Set<RemotePeer> knownPeers,  int maxPeers) {
         this.knownPeers = knownPeers;
         this.maxPeers = maxPeers;
     }
 
     // Getter
-    public List<RemotePeer> getKnownPeers() {
+    public Set<RemotePeer> getKnownPeers() {
         return knownPeers;
     }
 
@@ -38,10 +37,6 @@ public class KnownPeers {
 
     public int getSize() {
         return knownPeers.size();
-    }
-
-    public RemotePeer getPeer(int index){
-        return knownPeers.get(index);
     }
 
     public boolean isFull() {
@@ -63,6 +58,20 @@ public class KnownPeers {
 
     public boolean removePeer(RemotePeer node) {
         return knownPeers.remove(node);
+    }
+
+    public boolean containsPeer(RemotePeer node) {
+        return knownPeers.contains(node);
+    }
+
+    public Set<RemotePeer> getRandomPeers(int count) {
+        if (count > getSize()) {
+            count = getSize();
+        }
+
+        List<RemotePeer> peersList = new ArrayList<>(getKnownPeers());
+        Collections.shuffle(peersList); // randomize order
+        return new HashSet<>(peersList.subList(0, count));
     }
 
 }

@@ -93,7 +93,7 @@ public class Blockchain {
         logger.info("Attempting to create new block");
 
         if (pendingVotes.isEmpty()) {
-            logger.info("No pending votes");
+            logger.info("Failed to create new block: no pending votes");
             return;
         }
 
@@ -124,7 +124,7 @@ public class Blockchain {
         }
 
         if (votesForBlock.isEmpty()) {
-            logger.info("No pending votes");
+            logger.info("Failed to create new block: no valid votes");
             logDiscardedVotes(discardedVotes);
             return;
         }
@@ -137,7 +137,7 @@ public class Blockchain {
         try {
             newBlock.mineBlock(difficulty);
         }  catch (InvalidException e) {
-            logger.warn("Unable to mine block: " + e.getMessage());
+            logger.warn("Failed to create new block: unable to mine block: " + e.getMessage());
             return;
         }
 
@@ -145,11 +145,13 @@ public class Blockchain {
 
         // Add
         chain.add(newBlock);
-        distributeNewBlock(newBlock);
 
         // Logging
         logAcceptedVotes(votesForBlock);
         logDiscardedVotes(discardedVotes);
+
+        // Sharing
+        distributeNewBlock(newBlock);
     }
 
     // CreateNewBlock() helper methods
@@ -253,7 +255,6 @@ public class Blockchain {
 
     // Sending
     public void distributeNewBlock(Block newBlock) {
-        logger.info("Distributing block " + newBlock.getHash());
         localNode.handleNewBlock(newBlock);
     }
 

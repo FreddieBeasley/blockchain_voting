@@ -103,7 +103,7 @@
 <div class="outer">
     <h1>Connect</h1><br>
     <hr>
-    <form id="voteForm">
+    <form id="connect-form">
 
         <label for="host">Host</label>
         <input class="text_input" type="text" id="host" name="voterId" required><br>
@@ -117,7 +117,7 @@
         <button class="submit-button" type="submit">Connect</button>
     </form>
     <div class="response-outer">
-        <p class="response" id="vote-response"></p>
+        <p class="response" id="connect-response"></p>
     </div>
 </div>
 
@@ -143,5 +143,46 @@
     // Update logs every 5 seconds
     setInterval(fetchNetworkPeers, 5000);
 </script>
+
+<!-- javascript for connection -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.querySelector('#connect-form');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const host = document.getElementById('host').value.trim();
+            const port = document.getElementById('port').value.trim();
+
+
+            if (!(host && port)) {
+                document.getElementById('connect-response').innerText = "Please fill in all fields. ";
+                return;
+            }
+
+            const data = {
+                host: host,
+                port: port,
+            }
+
+            try {
+                const res = await fetch("/connect", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+                document.getElementById('connect-response').innerText = await res.text();
+            } catch (err) {
+                console.log(err);
+                document.getElementById('connect-response').innerText = err.message;
+            }
+        });
+    });
+</script>
+
+
 </body>
 </html>
