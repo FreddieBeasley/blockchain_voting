@@ -11,35 +11,31 @@ public class RemotePeer{
 
     private final String host;
     private final int port;
-    private final PublicKey publicKey;
+    private final String publicKey;
 
     // Initialisation
     public RemotePeer(String host, int port, String publicKey) throws InvalidException {
         this.host = host;
         this.port = port;
-
-        try {
-            this.publicKey = Cryptography.stringToPublicKey(publicKey);
-        } catch ( InvalidException e) {
-            throw new InvalidException("");
-        }
+        this.publicKey = publicKey;
     }
 
     // Getters
     public String getHost() {
         return host;
     }
+
     public int getPort() {
         return port;
     }
-    public String getID(){
-     return getHost() + ":" + getPort();
+
+    public String getPublicKey(){
+        return publicKey;
     }
 
-    public String getPublicKeyString(){
-        return Cryptography.publicKeyToString(publicKey);
-    }
-    public PublicKey getPublicKey(){
-        return publicKey;
+    @Override
+    public boolean equals(Object o) {
+        RemotePeer remotePeer = (RemotePeer) o;
+        return (getHost().equals(remotePeer.getHost())) && (getPort() == remotePeer.getPort()) && (getPublicKey().equals(remotePeer.getPublicKey()));
     }
 }

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SecureVote</title>
+
+    <!-- text inputs -->
+    <style>
+
+        form {
+            background-color: #15172b;
+            border-radius: 20px;
+            box-sizing: border-box;
+            height: 500px;
+            padding: 20px;
+            width: 320px;
+        }
+
+        .title {
+            color: #eee;
+            font-family: sans-serif;
+            font-size: 30px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .subtitle {
+            color: #eee;
+            font-family: sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .input-container {
+            height: 50px;
+            position: relative;
+            width: 100%;
+        }
+
+        .ic1 {
+            margin-top: 20px;
+            margin-bottom: 25px;
+        }
+
+        .ic2 {
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .input {
+            background-color: #303245;
+            border-radius: 12px;
+            border: 0;
+            box-sizing: border-box;
+            color: #eee;
+            font-size: 18px;
+            height: 100%;
+            outline: 0;
+            padding: 4px 20px 0;
+            width: 100%;
+        }
+
+        .cut {
+            background-color: #15172b;
+            border-radius: 10px;
+            height: 20px;
+            left: 20px;
+            position: absolute;
+            top: -20px;
+            transform: translateY(0);
+            transition: transform 200ms;
+            width: 76px;
+        }
+
+        .cut-short {
+            width: 50px;
+        }
+
+        .input:focus ~ .cut,
+        .input:not(:placeholder-shown) ~ .cut {
+            transform: translateY(8px);
+        }
+
+        .placeholder {
+            color: #65657b;
+            font-family: sans-serif;
+            left: 20px;
+            line-height: 14px;
+            pointer-events: none;
+            position: absolute;
+            transform-origin: 0 50%;
+            transition: transform 200ms, color 200ms;
+            top: 20px;
+        }
+
+        .input:focus ~ .placeholder,
+        .input:not(:placeholder-shown) ~ .placeholder {
+            transform: translateY(-30px) translateX(10px) scale(0.75);
+        }
+
+        .input:not(:placeholder-shown) ~ .placeholder {
+            color: #808097;
+        }
+
+        .input:focus ~ .placeholder {
+            color: #dc2f55;
+        }
+
+        .submit {
+            background-color: #08d;
+            border-radius: 12px;
+            border: 0;
+            box-sizing: border-box;
+            color: #eee;
+            cursor: pointer;
+            font-size: 18px;
+            height: 50px;
+            margin-top: 38px;
+        // outline: 0;
+            text-align: center;
+            width: 100%;
+        }
+
+        .submit:active {
+            background-color: #06b;
+        }
+
+    </style>
+
+    <!-- vote_value_group -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+            padding: 3rem;
+            color: #070707;
+            background: fixed linear-gradient(transparent, #fff 90%),
+            fixed repeating-linear-gradient(#efefef, #efefef 1px, transparent 1px, transparent 40px),
+            fixed repeating-linear-gradient(to right, #efefef, #efefef 1px, transparent 1px, transparent 40px) white;
+        }
+
+        .vote_value_group h1, h2 {
+            text-align: center;
+        }
+
+        .vote_value_group h1 {
+            font-size: 1.75rem;
+        }
+
+        .vote_value_group h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-block-end: 2rem;
+        }
+
+        .vote_value_group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .vote_value_group li {
+            position: relative;
+            flex-basis: 4.5rem;
+        }
+
+        .vote_value_group li::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            inset: -45% auto auto 50%;
+            translate: -50%;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+            color: #fff;
+            background: var(--bg, #070707);
+            border-radius: 0.25rem;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: inset 0.4s cubic-bezier(0.47, 2, 0.41, 1.5),
+            visibility 0.3s ease-in-out,
+            opacity 0.2s ease-in-out;
+            z-index: 1;
+        }
+
+        .vote_value_group li:hover::after,
+        .vote_value_group li:focus-within::after {
+            opacity: 1;
+            visibility: visible;
+            inset-block-start: -60%;
+        }
+
+        .vote_value_group button {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 3.5rem;
+            height: 3.5rem;
+            font-size: 1.5rem;
+            border-radius: 50%;
+            border: 1px solid;
+            background: transparent;
+            color: #ffffff;
+            cursor: pointer;
+            outline: none;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .vote_value_group button::after {
+            content: "";
+            position: absolute;
+            inset: 100% 0 0;
+            background: var(--bg, #070707);
+            transition: inset 0.3s ease-in-out;
+            z-index: 0;
+        }
+
+        .vote_value_group button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .vote_value_group button:hover,
+        .vote_value_group button.selected {
+            color: #070707;
+        }
+
+        .vote_value_group button:hover::after,
+        .vote_value_group button.selected::after {
+            inset-block-start: 0;
+        }
+
+        /* Form styling for unstyled section */
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .text_input,
+        .radio-group {
+            margin: 1rem 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        button[type="submit"] {
+            margin-top: 1rem;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        #response {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+
+    <!-- submit button-->
+    <style>
+        .submit {
+            background-color: #28a745;
+            border-radius: 12px;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            height: 50px;
+            text-align: center;
+            width: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit.loading {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            padding: 0;
+        }
+
+        .btn-text, .btn-loader, .btn-checkmark, .btn-cross {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .btn-text {
+            opacity: 1;
+        }
+
+        .submit.loading .btn-text { opacity: 0; }
+
+        .submit.success .btn-text .submit.error .btn-text { opacity: 0; }
+
+        .btn-loader {
+            border: 3px solid transparent;
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        .submit.loading .btn-loader { opacity: 1; }
+
+        .submit.success .btn-checkmark,
+        .submit.error .btn-cross {
+            opacity: 0;
+        }
+
+        .submit.success {
+            background-color: #28a745;
+        }
+
+        .submit.error {
+            background-color: #dc3545;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+
+    <!-- general -->
+    <style>
+
+        #response {
+            padding-top: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        footer {
+            padding-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        footer p{
+            text-align: center;
+        }
+
+        .small {
+            font-size: 6px;
+        }
+
+
+    </style>
+
+
+</head>
+<body>
+
+    <header>
+        <h1>VoteX</h1>
+    </header>
+
+    <form id="vote_form">
+        <div class="title">Welcome to <strong>VoteX</strong></div>
+        <div class="subtitle">Lets vote</div>
+
+        <div class="input-container ic1">
+            <input id="public-key" class="input" type="text" placeholder=" " />
+            <div class="cut"></div>
+            <label for="public-key" class="placeholder">public key</label>
+        </div>
+
+        <ul class="vote_value_group">
+            <li data-tooltip="Conservative" style="--bg: #0087DC">
+                <button type="button" data-value="1"><span>C</span></button>
+            </li>
+            <li data-tooltip="Green" style="--bg: #528D6B">
+                <button type="button" data-value="2"><span>G</span></button>
+            </li>
+            <li data-tooltip="Labour" style="--bg: #E4003B">
+                <button type="button" data-value="3"><span>L</span></button>
+            </li>
+            <li data-tooltip="LibDems" style="--bg: #FAA61A">
+                <button type="button" data-value="4"><span>LD</span></button>
+            </li>
+            <li data-tooltip="ReformUK" style="--bg: #12B6CF">
+                <button type="button" data-value="5"><span>R</span></button>
+            </li>
+            <li data-tooltip="YourPary" style="--bg: #E13E3B">
+                <button type="button" data-value="6"><span>YP</span></button>
+            </li>
+        </ul>
+
+        <div class="input-container ic2">
+            <input id="private-key" class="input" type="text" placeholder=" " />
+            <div class="cut"></div>
+            <label for="private-key" class="placeholder">private key</label>
+        </div>
+
+        <input type="hidden" id="voteValue" name="voteValue" required />
+
+        <button id="submitButton" class="submit">
+            <span class="btn-text">Submit</span>
+            <span class="btn-loader"></span>
+            <span class="btn-checkmark">Y</span>
+            <span class="btn-cross">X</span>
+        </button>
+
+    </form>
+
+    <p id="response"></p>
+
+    <footer>
+        <h2>About VoteX</h2>
+        <p>
+            SecureVote is more than just a voting platform — it's a movement toward transparency, trust, and tamper-proof democracy.
+            We use cryptographic signatures and decentralized validation to ensure every vote counts and is verifiable by design.
+        </p>
+        <p><strong>Empower your vote. Secure the future.</strong></p>
+        <p>©2025 Freddie Beasley</p>
+        <p class="small">Input box place holders: Mikael Ainalem</p>
+        <p class="small">Hover effects: optimisticweb</p>
+
+
+    </footer>
+    <script>
+        // --- DOM Ready ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('vote_form');
+            const responseEl = document.getElementById('response');
+            const voteButtons = document.querySelectorAll('.vote_value_group button');
+            const voteValueInput = document.getElementById('voteValue');
+            const submitButton = document.getElementById('submitButton');
+
+            // --- UI: Vote Button Selection ---
+            voteButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    voteButtons.forEach(b => b.classList.remove('selected'));
+                    button.classList.add('selected');
+                    voteValueInput.value = button.dataset.value;
+                });
+            });
+
+            // --- Form Submission ---
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const publicKey = document.getElementById('public-key').value.trim();
+                const privateKeyString = document.getElementById('private-key').value.trim();
+                const voteValue = voteValueInput.value.trim();
+
+                if (!(publicKey && voteValue && privateKeyString)) {
+                    setError("Please complete the form before submitting");
+                    return;
+                }
+
+                const content = `${publicKey}|||${voteValue}`;
+
+                setLoading();
+
+                try {
+                    const privateKey = await stringToPrivateKey(privateKeyString);
+                    if (!privateKey) {
+                        throw new Error("Invalid private key");
+                    }
+
+                    const signature = await signMessage(privateKey, content);
+                    if (!signature) {
+                        throw new Error("Failed to generate signature");
+                    }
+
+                    const data = {
+                        voter: publicKey,
+                        voteValue: voteValue,
+                        signature: signature,
+                    };
+
+                    const res = await fetch("/vote", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!res.ok) throw new Error(await res.text());
+                    setSuccess("Vote successfully submitted to the blockchain.");
+                } catch (err) {
+                    console.error(err);
+                    setError(err.message || "Failed to submit vote.");
+                }
+            });
+
+            // --- UI Feedback Handlers ---
+            function setLoading() {
+                submitButton.className = 'submit loading';
+                responseEl.innerText = '';
+            }
+
+            function setSuccess(message) {
+                submitButton.className = 'submit success';
+                responseEl.innerText = message;
+                responseEl.className = 'success';
+            }
+
+            function setError(message) {
+                submitButton.className = 'submit error';
+                responseEl.innerText = message;
+                responseEl.className = 'error';
+            }
+        });
+
+        // --- Crypto Helpers ---
+        async function stringToPrivateKey(privateKeyString) {
+            try {
+                const binary = atob(privateKeyString);
+                const keyBytes = new Uint8Array([...binary].map(c => c.charCodeAt(0)));
+                return await crypto.subtle.importKey(
+                    "pkcs8",
+                    keyBytes.buffer,
+                    {
+                        name: "RSASSA-PKCS1-v1_5",
+                        hash: "SHA-256"
+                    },
+                    false,
+                    ["sign"]
+                );
+            } catch (err) {
+                console.error("Invalid RSA private key", err);
+                return null;
+            }
+        }
+
+        async function signMessage(privateKey, message) {
+            try {
+                const encoder = new TextEncoder();
+                const signature = await crypto.subtle.sign(
+                    "RSASSA-PKCS1-v1_5",
+                    privateKey,
+                    encoder.encode(message)
+                );
+                return btoa(String.fromCharCode(...new Uint8Array(signature)));
+            } catch (err) {
+                console.error("RSA signing error", err);
+                return null;
+            }
+        }
+    </script>
+
+</body>
+</html>

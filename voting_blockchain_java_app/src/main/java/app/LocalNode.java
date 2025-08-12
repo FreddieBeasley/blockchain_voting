@@ -47,6 +47,23 @@ public class LocalNode {
         persistState();
     }
 
+    public LocalNode(String persistentBlockchain, String persistentNetworkManager, String registeredVoters, int peerPort, int webPort, int hostPort) {
+        // Network Information
+
+        // Linked Modules:
+        this.persistence = new Persistence(persistentBlockchain, persistentNetworkManager, registeredVoters, host, peerPort, this);
+
+        this.networkManager = persistence.loadNetworkManager();
+
+        this.blockchain = persistence.loadBlockchain();
+
+        this.webServer = new WebServer(host, webPort, this);
+
+        this.controlServer = new ControlServer(host, hostPort, this);
+
+        persistState();
+    }
+
     // Getter Methods - for Control server
     public JSONObject getBlockchainJSON(){
         return BlockchainParser.BlockchainToJSON(blockchain);
@@ -63,15 +80,15 @@ public class LocalNode {
     // main method
     public void start(){
         // ( Runs Voting and Registering Server )
-        Thread webThread = new Thread(webServer::start);
+        Thread webThread = new Thread(webServer::start, "WebServer-Thread");
         webThread.start();
 
         // ( Runs Network Communication Server )
-        Thread networkThread = new Thread(networkManager::start);
+        Thread networkThread = new Thread(networkManager::start, "Network-Thread");
         networkThread.start();
 
         // ( Runs Control Server )
-        Thread controlThread = new Thread(controlServer::start);
+        Thread controlThread = new Thread(controlServer::start, "ControlServer-Thread");
         controlThread.start();
 
         // ( Requests Blockchain From Peer Every Minute )
@@ -85,7 +102,7 @@ public class LocalNode {
                 }
                 networkManager.formulateOutgoingBlockchainRequest();
             }
-        });
+        }, "Consensus-Thread");
         consensusThread.start();
 
         // ( Persists Blockchain Every Minute )
@@ -98,7 +115,7 @@ public class LocalNode {
                 }
                 persistState();
             }
-        });
+        }, "Persistence-Thread");
         persistenceThread.start();
 
         // ( Attempts Mining Every Minute )
@@ -112,7 +129,7 @@ public class LocalNode {
                 }
                 blockchain.createNewBlock();
             }
-        });
+        }, "Mining-Thread");
         miningThread.start();
 
         try {

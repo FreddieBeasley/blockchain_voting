@@ -36,10 +36,11 @@ public class NetworkManager {
     private final String privateKey;
 
     private final KnownPeers knownPeers;
+    private final MessageCache messageCache;
 
     private final MessageReceiver messageReceiver;
 
-    public NetworkManager(String host, int port, LocalNode localNode, KnownPeers knownPeers) throws NoSuchAlgorithmException {
+    public NetworkManager(String host, int port, LocalNode localNode, KnownPeers knownPeers, MessageCache messageCache) throws NoSuchAlgorithmException {
         this.messageReceiver = new MessageReceiver(port, this);
 
         this.logger = LoggerFactory.getLogger(NetworkManager.class);
@@ -50,13 +51,14 @@ public class NetworkManager {
         this.port = port;
 
         this.knownPeers = knownPeers;
+        this.messageCache = messageCache;
 
         KeyPair keypair = Cryptography.generateKeyPair();
         this.publicKey = Cryptography.publicKeyToString(keypair.getPublic());
         this.privateKey = Cryptography.privateKeyToString(keypair.getPrivate());
     }
 
-    public NetworkManager(String host, int port, LocalNode localNode, KnownPeers knownPeers, String publicKey, String privateKey) throws InvalidException {
+    public NetworkManager(String host, int port, LocalNode localNode, KnownPeers knownPeers, MessageCache messageCache, String publicKey, String privateKey) throws InvalidException {
         this.messageReceiver = new MessageReceiver(port, this);
         this.logger = LoggerFactory.getLogger(NetworkManager.class);
 
@@ -64,7 +66,9 @@ public class NetworkManager {
 
         this.host = host;
         this.port = port;
+
         this.knownPeers = knownPeers;
+        this.messageCache = messageCache;
 
         // Ensures valid public and private key has been passed in
         Cryptography.stringToPublicKey(publicKey); // Throws InvalidException
@@ -87,11 +91,14 @@ public class NetworkManager {
         return knownPeers;
     }
 
+    public MessageCache getMessageCache() {
+        return messageCache;
+    }
+
 
     /* <---------Begin---Listening---For---Messages---------> */
     public void start() {
-        Thread serverThread = new Thread(messageReceiver);
-        serverThread.start();
+        messageReceiver.run();
     }
 
 
@@ -99,6 +106,7 @@ public class NetworkManager {
 
     // ( distributes send messages to 3 random known peers )
     public void distributeSendMessage(JSONObject message){
+        logger.info("Distributing message of type {}", message.getString("message_type"));
         for (RemotePeer peer : knownPeers.getRandomPeers(3)) {
             String foreignHost = peer.getHost();
             int foreignPort = peer.getPort();
@@ -106,18 +114,20 @@ public class NetworkManager {
             new Thread(() -> {
                 JSONObject response;
                 try {
+                    logger.debug("Attempting to send message to {}:{}", foreignHost, foreignPort);
                     response = MessageSender.send(foreignHost, foreignPort, message);
                 } catch (Exception e) {
-                    logger.warn("Unable to send message to peer " + foreignHost + ":" + foreignPort + " : " + e.getMessage());
+                    logger.warn("Unable to send message to {}:{} - {}",  foreignHost, foreignPort, e.getMessage(), e);
                     return;
                 }
 
-                if (response.getString("message_type").equals("accepted")) {
-                    logger.info(foreignHost + ":" + foreignPort + " accepted vote");
+                if(response.getBoolean("accepted")) {
+                    logger.info("{} accepted by {}:{}", response.getString("message_type"), foreignHost, foreignPort);
                 } else {
-                    logger.warn(foreignHost + ":" + foreignPort + " rejected vote: " + response.getJSONObject("data").getString("reason"));
+                    logger.error("Error sending {} to {}:{} - {}", message.getString("message_type"), foreignHost, foreignPort, response.getJSONObject("data").getString("reason"));
                 }
-            }).start();
+
+            }, "SendThread-" + foreignHost + ":" + foreignPort).start();
         }
     }
 
@@ -125,6 +135,8 @@ public class NetworkManager {
     public void formulateOutgoingVote(Vote vote) {
         try {
             // Create Message
+            logger.info("formulating outgoing vote");
+
             JSONObject data = BlockchainParser.VoteToJSON(vote);
             JSONObject message = formulateOutgoingMessage(data, "send_vote");
 
@@ -138,8 +150,11 @@ public class NetworkManager {
     // ( occurs on Blockchain block creation )
     public void formulateOutgoingBlock(Block block) {
         try {
+            logger.info("formulating outgoing block");
+
             JSONObject data = BlockchainParser.BlockToJSON(block);
             JSONObject message = formulateOutgoingMessage(data, "send_block");
+
             distributeSendMessage(message);
         } catch (Exception e) {
             logger.error("Failed to distribute block", e);
@@ -149,9 +164,12 @@ public class NetworkManager {
     // ( occurs on WebServer voter registration )
     public void formulateOutgoingVoter(String voter) {
         try {
+            logger.info("formulating outgoing voter");
+
             JSONObject data = new JSONObject();
             data.put("voter", voter);
             JSONObject message = formulateOutgoingMessage(data, "send_voter");
+
             distributeSendMessage(message);
         } catch (Exception e) {
             logger.error("Failed to distribute voter", e);
@@ -172,12 +190,13 @@ public class NetworkManager {
                 JSONObject message = formulateOutgoingMessage(data, "request_blockchain");
                 JSONObject response = MessageSender.send(foreignHost, foreignPort, message);
 
-                if (response.getString("message_type").equals("accepted")) {
+                if (response.getBoolean("accepted")) {
                     JSONObject JSONBlockchain = response.getJSONObject("data");
                     Blockchain newBlockchain = BlockchainParser.JSONToBlockchain(JSONBlockchain, localNode);
                     localNode.handleNetworkBlockchain(newBlockchain);
+                    logger.info("{} accepted by {}:{}", message.getString("message_type"), foreignHost, foreignPort);
                 } else {
-                    logger.warn("Blockchain request rejected by " + foreignHost + ":" + foreignPort + " : " + response.getJSONObject("data").getString("reason"));
+                    logger.warn("{} rejected by {}:{} - {}", message.getString("message_type"), foreignHost, foreignPort, response.getJSONObject("data").getString("reason"));
                 }
 
             } catch (Exception e) {
@@ -194,29 +213,42 @@ public class NetworkManager {
             JSONObject message = formulateOutgoingMessage(data, "request_connection");
             JSONObject response = MessageSender.send(foreignHost, foreignPort, message);
 
-            if (response.getString("message_type").equals("accepted")) {
-                JSONObject JSONPeer = response.getJSONObject("data");
+            if (response.getBoolean("accepted")) {
+                JSONObject JSONPeer = response.getJSONObject("sender");
                 RemotePeer newPeer = NetworkParser.JSONToRemotePeer(JSONPeer);
                 knownPeers.addPeer(newPeer);
-                logger.info(foreignHost + ":" + foreignPort + " accepted connection request");
+                logger.info("{} accepted by {}:{}", message.getString("message_type"), foreignHost, foreignPort);
             } else {
-                logger.warn("Connection request rejected by " + foreignHost + ":" + foreignPort + " : " + response.getJSONObject("data").getString("reason"));
+                logger.warn("{} rejected by {}:{} - {}", message.getString("message_type"), foreignHost, foreignPort, response.getJSONObject("data").getString("reason"));
             }
 
         } catch (Exception e) {
-            logger.warn("Failed to complete connection request", e);
+            logger.warn("Failed to complete connection request: " + e.getMessage(), e);
         }
     }
+
+    public void sendPingMessage() {}
 
 
     /* <---------General---Message---Constructors---------> */
 
     // ( constructs message into recognised format )
-    private JSONObject formulateOutgoingMessage(JSONObject data, String messageType) throws SignatureException {
+    private JSONObject formulateOutgoingMessage(JSONObject data, String messageType) throws Exception {
         JSONObject message = new JSONObject();
         message.put("sender", formulatePeerID());
         message.put("message_type", messageType);
         message.put("data", data);
+
+        String hash;
+        try {
+            hash = Cryptography.hash(data.toString());
+        } catch (Exception e) {
+            logger.error("Failed to hash message", e);
+            throw new Exception("Failed to hash message");
+        }
+        message.put("hash", hash);
+        messageCache.addHash(hash);
+
 
         String signature;
         try {
@@ -225,7 +257,6 @@ public class NetworkManager {
             logger.error("Failed to sign message", e);
             throw new SignatureException("Failed to sign message");
         }
-
         message.put("signature", signature);
 
         return message;
@@ -236,7 +267,7 @@ public class NetworkManager {
         JSONObject peerID = new JSONObject();
         peerID.put("host", host);
         peerID.put("port", port);
-        peerID.put("publicKey", publicKey);
+        peerID.put("public_key", publicKey);
         return peerID;
     }
 
@@ -245,7 +276,7 @@ public class NetworkManager {
 
     // ( deciphers messages from recognised format )
     public JSONObject handleIncomingMessage(JSONObject message) {
-        String received_messageType = message.getString("message_type");
+        String messageType = message.getString("message_type");
         JSONObject received_data = message.getJSONObject("data");
 
         String response_messageType = "";
@@ -256,72 +287,74 @@ public class NetworkManager {
             validateMessage(message);
         } catch (InvalidParameterException e) {
             response_data.put("reason", e.getMessage());
-            return constructResponse("rejected", response_data);
+            return constructResponse(messageType, false, response_data);
         }
 
         // Handle send messages
-        if (received_messageType.startsWith("send")) {
-            response_messageType = "accepted_data";
-            if (received_messageType.endsWith("vote")) {
-                response_data.put("type", "vote");
-                Vote vote;
-
+        switch (messageType) {
+            case "send_vote" -> {
                 try {
-                    vote = BlockchainParser.JSONToVote(received_data);
+                    Vote vote = BlockchainParser.JSONToVote(received_data);
                     localNode.handleNetworkVote(vote);
+                    JSONObject newMessage = formulateOutgoingMessage(received_data,messageType);
+                    distributeSendMessage(newMessage);
+                    return constructResponse(messageType, true, response_data);
                 } catch (Exception e) {
                     response_data.put("reason", e.getMessage());
-                    return constructResponse("rejected", response_data);
+                    return constructResponse(messageType, false, response_data);
                 }
-
-                //redistribute
-                formulateOutgoingVote(vote);
-
-            } else if (received_messageType.endsWith("voter")) {
-                response_data.put("type", "voter");
-
-                String voter =  received_data.getString("voter");
-                localNode.handleNetworkVoter(voter);
-
-                //redistribute
-                formulateOutgoingVoter(voter);
-
-            } else if (received_messageType.endsWith("block")) {
-                response_data.put("type", "block");
-                Block block;
-
-                try {
-                    block = BlockchainParser.JSONToBlock(received_data);
-                    localNode.handleNetworkBlock(block);
-                } catch (Exception e) {
-                    response_data.put("reason", e.getMessage());
-                    return constructResponse("rejected", response_data);
-                }
-
-                //redistribute
-                formulateOutgoingBlock(block);
             }
-
-        } else if (received_messageType.equals("request_blockchain")) {
-            JSONObject JSONBlockchain = localNode.getBlockchainJSON();
-            response_messageType = "accepted_request";
-            response_data = JSONBlockchain;
-
-        } else if (received_messageType.equals("request_connection")) {
-            try {
-                JSONObject JSONPeer = message.getJSONObject("sender");
-                RemotePeer newPeer = NetworkParser.JSONToRemotePeer(JSONPeer);
-                knownPeers.addPeer(newPeer);
-
-                response_messageType = "accepted_request";
-                response_data = JSONPeer;
-            } catch (Exception e) {
-                response_messageType = "rejected_request";
-                response_data.put("reason", e.getMessage());
+            case "send_voter" -> {
+                try {
+                    String voter = received_data.getString("voter");
+                    localNode.handleNetworkVoter(voter);
+                    JSONObject newMessage = formulateOutgoingMessage(received_data,messageType);
+                    distributeSendMessage(newMessage);
+                    return constructResponse(messageType, true, response_data);
+                } catch (Exception e) {
+                    response_data.put("reason", e.getMessage());
+                    return constructResponse(messageType, false, response_data);
+                }
+            }
+            case "send_block" -> {
+                try {
+                    Block block = BlockchainParser.JSONToBlock(received_data);
+                    localNode.handleNetworkBlock(block);
+                    JSONObject newMessage = formulateOutgoingMessage(received_data,messageType);
+                    distributeSendMessage(newMessage);
+                    return constructResponse(messageType, true, response_data);
+                } catch (Exception e) {
+                    response_data.put("reason", e.getMessage());
+                    return constructResponse(messageType, false, response_data);
+                }
+            }
+            case "request_connection" -> {
+                try {
+                    RemotePeer peer = NetworkParser.JSONToRemotePeer(message.getJSONObject("sender"));
+                    knownPeers.addPeer(peer);
+                    return constructResponse(messageType, true, response_data);
+                } catch (Exception e) {
+                    response_data.put("reason", e.getMessage());
+                    return constructResponse(messageType, false, response_data);
+                }
+            }
+            case "request_blockchain" -> {
+                try {
+                    response_data = localNode.getBlockchainJSON();
+                    return constructResponse(messageType, true, response_data);
+                } catch (Exception e) {
+                    response_data.put("reason", e.getMessage());
+                    return constructResponse(messageType, false, response_data);
+                }
+            }
+            case "ping" -> {
+                return constructResponse(messageType, true, response_data);
+            }
+            default -> {
+                response_data.put("reason", "Invalid message type");
+                return constructResponse(messageType, false, response_data);
             }
         }
-
-        return constructResponse(response_messageType, response_data);
     }
 
     // Helpers for handleIncomingResponse()
@@ -329,6 +362,7 @@ public class NetworkManager {
         JSONObject sender;
         String message_type;
         JSONObject data;
+        String hash;
         String signature;
 
         // All message fields exist
@@ -336,17 +370,31 @@ public class NetworkManager {
             sender = message.getJSONObject("sender");
             message_type = message.getString("message_type");
             data = message.getJSONObject("data");
+            hash = message.getString("hash");
             signature = message.getString("signature");
         } catch (Exception e) {
             throw new InvalidParameterException("Invalid message format: " + e.getMessage());
         }
 
+        // Message has valid sender
+        RemotePeer senderPeer;
+        try {
+            senderPeer = NetworkParser.JSONToRemotePeer(sender);
+        } catch (Exception e) {
+            throw new InvalidParameterException("Malformed sender field");
+        }
+
         // Message has valid signature
         try {
-            Cryptography.verify(data.toString(), publicKey, signature);
+            Cryptography.verify(data.toString(), signature, senderPeer.getPublicKey());
         } catch (Exception e) {
-            throw new InvalidParameterException("Invalid signature");
+            throw new InvalidParameterException("Invalid signature: " + e.getMessage());
         }
+
+        if (messageCache.containsHash(hash)) {
+            throw new InvalidParameterException("Message already seen");
+        }
+
 
         // Message has valid message type
         List<String> message_types = new ArrayList<>();
@@ -360,21 +408,21 @@ public class NetworkManager {
             throw new InvalidParameterException("Invalid message_type " + message_type);
         }
 
-        // Message sender is a peer ( not for request_connection )
-        try {
-            RemotePeer senderPeer = NetworkParser.JSONToRemotePeer(sender);
-            if (!(!message_type.equals("request_connection") && knownPeers.containsPeer(senderPeer))) {
-                throw new InvalidParameterException("Sender not in known peer list");
-            }
-        } catch (Exception e) {
-            throw new InvalidParameterException("Invalid sender: " + e.getMessage());
+        // Sender in knownPeers ( unless requesting connection )
+        if (message_type.equals("request_connection")) {
+            return;
+        }
+
+        if (!knownPeers.containsPeer(senderPeer)) {
+            throw new InvalidParameterException("Sender not in known peer list");
         }
     }
 
-    public JSONObject constructResponse(String messageType, JSONObject data) {
+    public JSONObject constructResponse(String messageType, boolean accepted, JSONObject data) {
         JSONObject response = new JSONObject();
         response.put("sender", formulatePeerID());
         response.put("message_type", messageType);
+        response.put("accepted", accepted);
         response.put("data", data);
 
         String signature;

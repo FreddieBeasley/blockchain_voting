@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Control Panel Logs</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            background-color: lightgray;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+            height: 40px;
+            background-color: gray;
+        }
+        nav a {
+            text-decoration: none;
+            color: black;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .title {
+            padding-left: 20px;
+        }
+
+        .separator {
+            width: 600px;
+            height: 3px;
+            border-radius: 1px;
+            margin: 5px;
+            background-color: black;
+            border: none;
+        }
+
+        #log-container {
+            font-size: 15px;
+            white-space: pre-wrap;
+            color: black;
+
+
+            padding-left: 20px;
+            min-height: 500px;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <a href="/log-page">Logs</a> |
+    <a href="/blockchain-page">Blockchain</a> |
+    <a href="/network-page">Network</a>
+</nav>
+
+<h1 class="title">Logs</h1>
+<hr class="separator" />
+<div id="log-container">Loading logs...</div>
+
+<!-- javascript for fetching logs-->
+<script>
+    async function fetchLogs() {
+        try {
+            const resp = await fetch('/logs');
+            if (!resp.ok) throw new Error('Network response not ok');
+            const logs = await resp.json();
+            const container = document.getElementById('log-container');
+
+            // Format logs nicely
+            const formatted = logs.map(log => {
+                const time = new Date(log.timestamp).toLocaleTimeString();
+                return `[${time}] [${log.level}] [${log.thread}] ${log.message}`;
+            }).join('\n');
+
+            container.textContent = formatted;
+        } catch (e) {
+            document.getElementById('log-container').textContent = 'Failed to load logs: ' + e;
+        }
+    }
+
+    fetchLogs();
+    // Update logs every 5 seconds
+    setInterval(fetchLogs, 5000);
+</script>
+</body>
+</html>

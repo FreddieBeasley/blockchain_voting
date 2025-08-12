@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a3cff98b-7f9b-4801-8536-cbb70f415dd3" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data2/blockchain.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data2/network_manager.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data2/registered_voters.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/java/TestingNode2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data/DOCUMENTATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data/blockchain_data/chain.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data/blockchain_data/metadata.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data/blockchain_data/pending_votes.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data/blockchain_data/remaining_voters.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data/network_manager.json" beforeDir="false" afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/data/network_manager.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/java/Testing.java" beforeDir="false" afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/java/TestingNode1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/java/app/LocalNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/java/app/LocalNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/java/app/resources/NetworkManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/src/main/java/app/resources/NetworkManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/target/classes/Testing.class" beforeDir="false" afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/target/classes/Testing.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/target/classes/app/LocalNode.class" beforeDir="false" afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/target/classes/app/LocalNode.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_app/target/classes/app/resources/NetworkManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/../voting_blockchain_java_app/target/classes/app/resources/NetworkManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_registration/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_registration/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_registration/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_registration/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_java_registration/.idea/voting_blockchain_java_registration.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_python/app.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_python/blockchain.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_python/blockchain_simulation.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_python/gen_keys.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_python/rsa2.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../voting_blockchain_python/voter_keys.json" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="PHPCodeSnifferBlackList">
+    <option name="filePaths">
+      <option value="$PROJECT_DIR$/src/main/frontend/index.php" />
+    </option>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/opt/homebrew/Cellar/php/8.4.10/bin/php" />
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="30awsvDLQVXclF6ka3G7gt1GxUK" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.Main2.executor": "Run",
+    "Application.Testing.executor": "Run",
+    "Application.registration.executor": "Run",
+    "JavaScript Debug.index.html.executor": "Run",
+    "JavaScript Debug.vote.html.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "PHP Script.index.php.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_directory_selection": "/Users/freddiebeasley/Desktop/Work/ComputerScience/programming_projects/projects_active/blockchain/voting/voting_blockchain_java_app/src/main/java",
+    "last_opened_file_path": "/Users/freddiebeasley/Desktop/Work/ComputerScience/github/blockchain_voting/voting_blockchain_java_app_2",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="app.resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/frontend/user" />
+      <recent name="$PROJECT_DIR$/src/main/frontend" />
+      <recent name="$PROJECT_DIR$/src/main/frontend/javascript" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src/main/java" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="app.resources.exceptions" />
+      <recent name="exceptions" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Testing">
+    <configuration name="Testing" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Testing" />
+      <module name="MyApp" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="vote2.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/voting_blockchain_java_app/MyApp/src/main/frontend/vote2.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="vote.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/voting_blockchain_java_app/MyApp/src/main/frontend/user/vote.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="voting_blockchain_java_app" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="voting_blockchain_java_app" />
+      <option name="filePath" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <module name="voting_blockchain_java_app" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Python.FlaskServer">
+      <module name="voting_blockchain_java_app" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="Tox" factoryName="Tox">
+      <module name="voting_blockchain_java_app" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Testing" />
+        <item itemvalue="JavaScript Debug.vote.html" />
+        <item itemvalue="JavaScript Debug.vote2.html" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.26927.53" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.26927.53" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a3cff98b-7f9b-4801-8536-cbb70f415dd3" name="Changes" comment="" />
+      <created>1753879201199</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1753879201199</updated>
+      <workItem from="1753879202293" duration="975000" />
+      <workItem from="1753881092902" duration="22517000" />
+      <workItem from="1753989424725" duration="1865000" />
+      <workItem from="1753991695459" duration="30422000" />
+      <workItem from="1754119254866" duration="34239000" />
+      <workItem from="1754227818205" duration="2825000" />
+      <workItem from="1754232211134" duration="32354000" />
+      <workItem from="1754320267868" duration="20741000" />
+      <workItem from="1754405041982" duration="14299000" />
+      <workItem from="1754464674440" duration="109856000" />
+      <workItem from="1754906546140" duration="14641000" />
+      <workItem from="1754922115181" duration="2015000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.security.spec.InvalidKeySpecException" package="java.security.spec" />
+          <option name="timeStamp" value="5" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="exceptions.InvalidBlockchainException" package="exceptions" />
+          <option name="timeStamp" value="10" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="exceptions.MalformedJSONBlockchainException" package="exceptions" />
+          <option name="timeStamp" value="49" />
+        </breakpoint>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="resources.exceptions.LoadException" package="resources.exceptions" />
+          <option name="timeStamp" value="70" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

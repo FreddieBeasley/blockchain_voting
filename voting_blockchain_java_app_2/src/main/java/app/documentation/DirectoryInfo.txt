@@ -1,0 +1,35 @@
+Java
+
+    LocalPeer.java
+
+    Resources
+        Blockchain.java
+        NetworkManager.java
+        Persistence.java
+
+        Blockchain
+            Chain.java
+            PendingVotes.java
+            RemainingVoters.java
+
+            Resources
+                Block.java
+                Vote.java
+
+        Network
+            KnownPeers.java
+            MessageReciever.java
+            MessageSender.java
+
+            Resources
+                RemotePeer.java
+
+        Util
+            Cryptography.java
+            ExceptionFormatter.java
+            FileHandler.java
+            JSONParser.java
+
+        Exceptions
+            TBC
+

@@ -48,7 +48,8 @@ public class ControlServer {
         }
 
         // Pages
-        server.createContext("/log-page", new StaticFileHandler("src/main/frontend/owner/root.html", "text/html")); // Displays logs
+        server.createContext("/", new StaticFileHandler("src/main/frontend/owner/root.html", "text/html")); // Start-Up
+        server.createContext("/log-page", new StaticFileHandler("src/main/frontend/owner/log.html", "text/html")); // Displays logs
         server.createContext("/blockchain-page",  new StaticFileHandler("src/main/frontend/owner/blockchain.html", "text/html")); // Displays blockchain
         server.createContext("/network-page",  new StaticFileHandler("src/main/frontend/owner/network.html", "text/html")); // Displays network peers
 

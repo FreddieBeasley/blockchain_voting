@@ -6,6 +6,7 @@ import app.resources.exceptions.InvalidException;
 import app.resources.exceptions.LoadException;
 import app.resources.exceptions.MalformedJSONException;
 import app.resources.exceptions.PersistenceException;
+import app.resources.network.MessageCache;
 import app.resources.util.Exceptions;
 import app.resources.network.KnownPeers;
 import app.resources.util.FileHandlers;
@@ -72,7 +73,7 @@ public class Persistence {
 
     // Blockchain Load
     private Blockchain attemptBlockchainLoad() throws LoadException {
-        JSONObject blockchainJson = null;
+        JSONObject blockchainJson;
         try {
             blockchainJson = (JSONObject) FileHandlers.readFromJSONFile(persistentBlockchain.getPath());
         } catch (IOException e) {
@@ -175,52 +176,8 @@ public class Persistence {
         return networkManager;
     }
 
-    private KnownPeers attemptKnownPeersLoad() throws LoadException {
-        JSONObject networkManagerJSON;
-
-        try {
-            networkManagerJSON = (JSONObject) FileHandlers.readFromJSONFile(persistentNetworkManager.getPath()); // Throws IOException
-        } catch (IOException e) {
-            throw new LoadException("knownPeers is missing", e);
-        }
-
-        if (networkManagerJSON == null) {
-            throw new LoadException("knownPeers is missing");
-        }
-
-        JSONObject knownPeersJSON;
-
-        try {
-            knownPeersJSON = networkManagerJSON.getJSONObject("known_peers");
-        }  catch (JSONException e) {
-            throw new LoadException("knownPeers is missing", e);
-        }
-
-        if (knownPeersJSON == null) {
-            throw new LoadException("knownPeers is missing");
-        }
-
-        KnownPeers knownPeers;
-
-        try {
-            knownPeers = NetworkParser.JSONToKnownPeers(knownPeersJSON);
-        } catch (MalformedJSONException e) {
-            throw new LoadException("knownPeers is malformed", e);
-        }
-
-        return knownPeers;
-    }
-
-    private NetworkManager attemptNetworkManagerCreationWithOnlyKnownPeers() throws LoadException, InvalidAlgorithmParameterException {
-        try {
-            return new NetworkManager(host, port, localNode, attemptKnownPeersLoad());
-        } catch (NoSuchAlgorithmException e) {
-            throw new LoadException("network_manager.json is malformed", e);
-        }
-    }
-
     private NetworkManager createNewNetworkManager() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
-        return new NetworkManager(host, port, localNode, new KnownPeers());
+        return new NetworkManager(host, port, localNode, new KnownPeers(), new MessageCache());
     }
 
     public NetworkManager loadNetworkManager() {
@@ -230,14 +187,6 @@ public class Persistence {
             return newNetworkManager;
         } catch (LoadException e) {
             logger.warn("Error loading network manager" + Exceptions.buildExceptionChain(e) );
-        }
-
-        try {
-            NetworkManager newNetworkManager = attemptNetworkManagerCreationWithOnlyKnownPeers();
-            logger.info("Successfully loaded networkManager without cryptographic keys");
-            return newNetworkManager;
-        } catch (LoadException | InvalidAlgorithmParameterException e) {
-            logger.warn("Error creating network manager with known nodes" + Exceptions.buildExceptionChain(e) );
         }
 
         try {
@@ -261,7 +210,7 @@ public class Persistence {
         }
     }
 
-    public void persistNetworkManager(NetworkManager networkManager) throws PersistenceException {
+    public void persistNetworkManager(NetworkManager networkManager) throws PersistenceException  {
         JSONObject persistentNetworkManagerJSON = NetworkParser.networkManagerToJSON(networkManager);
 
         try {

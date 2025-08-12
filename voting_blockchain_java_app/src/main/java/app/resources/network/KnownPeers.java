@@ -2,9 +2,12 @@ package app.resources.network;
 
 // Imports
 
+import app.resources.JSONParsers.NetworkParser;
+import app.resources.NetworkManager;
 import app.resources.exceptions.ArchivedException;
 import app.resources.exceptions.OverflowException;
 import app.resources.network.resources.RemotePeer;
+import org.json.JSONObject;
 
 import java.util.*;
 
@@ -61,7 +64,12 @@ public class KnownPeers {
     }
 
     public boolean containsPeer(RemotePeer node) {
-        return knownPeers.contains(node);
+        for (RemotePeer remotePeer : knownPeers) {
+            if (remotePeer.equals(node)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Set<RemotePeer> getRandomPeers(int count) {
@@ -73,5 +81,6 @@ public class KnownPeers {
         Collections.shuffle(peersList); // randomize order
         return new HashSet<>(peersList.subList(0, count));
     }
+
 
 }
